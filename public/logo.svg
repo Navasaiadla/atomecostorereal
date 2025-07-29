@@ -1,0 +1,21 @@
+<svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="120" height="40" fill="white"/>
+  
+  <!-- Letter A (Red) -->
+  <path d="M8 32 L12 20 L16 32 M10 26 L14 26" stroke="#FF4444" stroke-width="2" fill="none"/>
+  
+  <!-- Letter t (Yellow) -->
+  <path d="M20 20 L20 32 M18 22 L22 22" stroke="#FFD700" stroke-width="2" fill="none"/>
+  
+  <!-- Globe with India (Green) -->
+  <circle cx="28" cy="26" r="6" fill="#4CAF50" stroke="#2E7D32" stroke-width="1"/>
+  <!-- India outline -->
+  <path d="M26 24 L27 23 L28 24 L27 25 L26 24" fill="#FFD700"/>
+  
+  <!-- Letter m (Blue) -->
+  <path d="M36 32 L36 20 L38 20 L38 26 L40 20 L42 20 L42 26 L44 20 L44 32" stroke="#2196F3" stroke-width="2" fill="none"/>
+  
+  <!-- "eco store" text -->
+  <text x="8" y="38" font-family="Arial, sans-serif" font-size="8" fill="#4CAF50" font-weight="bold">eco store</text>
+</svg> 
