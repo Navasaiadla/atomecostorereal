@@ -25,6 +25,13 @@ const categories = [
     description: 'Eco-friendly kitchen essentials',
     productCount: 28,
     color: 'bg-blue-50'
+  },
+  {
+    id: 'clothes',
+    title: 'Clothes',
+    description: 'Sustainable and organic clothing',
+    productCount: 24,
+    color: 'bg-purple-50'
   }
 ]
 

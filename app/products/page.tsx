@@ -75,7 +75,8 @@ const categories = [
   { id: 'all', name: 'All Products' },
   { id: 'home-living', name: 'Home & Living' },
   { id: 'personal-care', name: 'Personal Care' },
-  { id: 'kitchen', name: 'Kitchen & Dining' }
+  { id: 'kitchen', name: 'Kitchen & Dining' },
+  { id: 'clothes', name: 'Clothes' }
 ]
 
 export default function ProductsPage() {
