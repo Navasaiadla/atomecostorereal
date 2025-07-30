@@ -73,62 +73,49 @@ export default function ContactPage() {
             
             {/* Contact Information */}
             <div className="space-y-8">
-              <div className="bg-white rounded-2xl p-8">
-                <h2 className="text-2xl font-semibold text-[#2B5219] mb-6">Get in Touch</h2>
-                
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-[#2B5219] rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-white">📧</span>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">Email</h3>
-                      <p className="text-gray-600">hello@atomecostore.com</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-[#2B5219] rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-white">📞</span>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">Phone</h3>
-                      <p className="text-gray-600">+91 98765 43210</p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-[#2B5219] rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-white">📍</span>
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-gray-900">Address</h3>
-                      <p className="text-gray-600">
-                        123 Eco Street<br />
-                        Green City, India 123456
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                             <div className="bg-white rounded-2xl p-8">
+                 <h2 className="text-2xl font-semibold text-[#2B5219] mb-6">Get in Touch</h2>
+                 
+                 <div className="space-y-6">
+                   <div className="flex items-start gap-4">
+                     <div className="w-10 h-10 bg-[#2B5219] rounded-full flex items-center justify-center flex-shrink-0">
+                       <span className="text-white">📧</span>
+                     </div>
+                     <div>
+                       <h3 className="font-semibold text-gray-900">Email</h3>
+                       <p className="text-gray-600">atomecostores@gmail.com</p>
+                     </div>
+                   </div>
+                   
+                   <div className="flex items-start gap-4">
+                     <div className="w-10 h-10 bg-[#2B5219] rounded-full flex items-center justify-center flex-shrink-0">
+                       <span className="text-white">📞</span>
+                     </div>
+                     <div>
+                       <h3 className="font-semibold text-gray-900">Phone</h3>
+                       <p className="text-gray-600">+91 9390119683</p>
+                     </div>
+                   </div>
+                 </div>
+               </div>
               
-              <div className="bg-white rounded-2xl p-8">
-                <h2 className="text-2xl font-semibold text-[#2B5219] mb-6">Business Hours</h2>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Monday - Friday</span>
-                    <span className="font-medium">9:00 AM - 6:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Saturday</span>
-                    <span className="font-medium">10:00 AM - 4:00 PM</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Sunday</span>
-                    <span className="font-medium">Closed</span>
-                  </div>
-                </div>
-              </div>
+                             <div className="bg-white rounded-2xl p-8">
+                 <h2 className="text-2xl font-semibold text-[#2B5219] mb-6">Business Hours</h2>
+                 <div className="space-y-3">
+                   <div className="flex justify-between">
+                     <span className="text-gray-600">Monday - Friday</span>
+                     <span className="font-medium">9:00 AM - 6:00 PM</span>
+                   </div>
+                   <div className="flex justify-between">
+                     <span className="text-gray-600">Saturday</span>
+                     <span className="font-medium">10:00 AM - 4:00 PM</span>
+                   </div>
+                   <div className="flex justify-between">
+                     <span className="text-gray-600">Sunday</span>
+                     <span className="font-medium">10:00 AM - 4:00 PM</span>
+                   </div>
+                 </div>
+               </div>
             </div>
           </div>
         </div>

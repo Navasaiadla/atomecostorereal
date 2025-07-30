@@ -5,7 +5,7 @@ export function Footer() {
   return (
     <footer className="bg-white border-t mt-auto">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-12">
           {/* Brand Section */}
           <div className="col-span-1">
             <Image 
@@ -65,6 +65,30 @@ export function Footer() {
                 <Link href="/support" className="text-gray-600 hover:text-[#2B5219]">
                   Customer Support
                 </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-gray-600 hover:text-[#2B5219]">
+                  Contact Us
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Contact Information */}
+          <div>
+            <h3 className="font-medium text-gray-900 mb-4">Contact Us</h3>
+            <ul className="space-y-3">
+              <li>
+                <a href="mailto:atomecostores@gmail.com" className="text-gray-600 hover:text-[#2B5219] flex items-center gap-2">
+                  <span>📧</span>
+                  atomecostores@gmail.com
+                </a>
+              </li>
+              <li>
+                <a href="tel:+919390119683" className="text-gray-600 hover:text-[#2B5219] flex items-center gap-2">
+                  <span>📞</span>
+                  +91 9390119683
+                </a>
               </li>
             </ul>
           </div>
