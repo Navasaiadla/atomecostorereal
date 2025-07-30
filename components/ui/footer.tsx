@@ -112,6 +112,11 @@ export function Footer() {
                   Refund Policy
                 </Link>
               </li>
+              <li>
+                <Link href="/sell-here" className="text-gray-600 hover:text-[#2B5219]">
+                  Sell Here
+                </Link>
+              </li>
             </ul>
           </div>
         </div>

@@ -97,7 +97,7 @@ export default function ContactPage() {
                      </div>
                    </div>
                  </div>
-               </div>
+               </div>git status
               
                              <div className="bg-white rounded-2xl p-8">
                  <h2 className="text-2xl font-semibold text-[#2B5219] mb-6">Business Hours</h2>

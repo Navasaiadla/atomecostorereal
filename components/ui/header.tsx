@@ -34,8 +34,19 @@ export function Header() {
             </div>
           </div>
 
-          {/* Login/Logout */}
-          <div className="flex items-center gap-4">
+                           {/* Cart and Login/Logout */}
+                 <div className="flex items-center gap-4">
+                   <Link href="/cart" className="relative group">
+                     <div className="w-12 h-12 bg-gradient-to-r from-[#2B5219] to-[#4a7c3a] rounded-full flex items-center justify-center text-white hover:from-[#1a3110] hover:to-[#2B5219] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                       </svg>
+                       <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold shadow-lg">3</span>
+                     </div>
+                     <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+                       Cart (3 items)
+                     </div>
+                   </Link>
             <Link href="/login">
               <Button className="bg-[#2B5219] hover:bg-[#1a3110] text-white">
                 Login
