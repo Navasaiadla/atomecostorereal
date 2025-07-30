@@ -2,66 +2,57 @@ import Image from 'next/image'
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <div className="container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-gray-900 mb-8 text-center">About Atom Eco Store</h1>
-          
-          <div className="prose prose-lg mx-auto">
-            <p className="text-lg text-gray-600 mb-8">
-              Atom Eco Store is India's premier destination for sustainable, eco-friendly products. 
-              We believe that every small choice we make can have a big impact on our planet's future.
-            </p>
+    <div className="max-w-3xl mx-auto py-10 px-4">
+      <h1 className="text-2xl font-bold mb-6">About Us</h1>
+      <div className="space-y-6 text-gray-700">
+        <p className="text-lg leading-relaxed">
+          Welcome to <strong className="text-green-600">Atom Eco Store</strong> – your trusted destination for sustainable, natural, and eco-friendly products that make a positive impact on both your life and our planet.
+        </p>
+        
+        <div className="bg-green-50 border-l-4 border-green-400 p-4">
+          <h2 className="text-lg font-semibold mb-2 text-green-800">Our Story</h2>
+          <p className="text-green-700">
+            Founded with a passion for environmental conservation, Atom Eco Store began as a small initiative to provide Indian consumers with access to high-quality, sustainable alternatives to everyday products.
+          </p>
+        </div>
 
-            <div className="grid md:grid-cols-2 gap-12 my-12">
-              <div>
-                <h2 className="text-2xl font-semibold text-[#2B5219] mb-4">Our Mission</h2>
-                <p className="text-gray-600">
-                  To make sustainable living accessible, affordable, and desirable for everyone. 
-                  We curate products that are not only good for the environment but also enhance your daily life.
-                </p>
-              </div>
-              
-              <div>
-                <h2 className="text-2xl font-semibold text-[#2B5219] mb-4">Our Values</h2>
-                <ul className="text-gray-600 space-y-2">
-                  <li>• Environmental responsibility</li>
-                  <li>• Supporting local artisans</li>
-                  <li>• Quality and durability</li>
-                  <li>• Transparency in sourcing</li>
-                </ul>
-              </div>
+        <div>
+          <h2 className="text-lg font-semibold mb-3 text-gray-900">What We Offer</h2>
+          <ul className="list-disc list-inside space-y-2">
+            <li>100% natural and organic personal care products</li>
+            <li>Eco-friendly home and kitchen essentials</li>
+            <li>Sustainable fashion and lifestyle items</li>
+            <li>Zero-waste and plastic-free alternatives</li>
+            <li>Locally sourced and ethically made products</li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 className="text-lg font-semibold mb-3 text-gray-900">Why Choose Atom Eco Store?</h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-medium text-gray-900 mb-2">🌱 Authenticity</h3>
+              <p className="text-sm">Every product is carefully curated and verified for its eco-friendly credentials.</p>
             </div>
-
-            <div className="bg-green-50 rounded-2xl p-8 my-12">
-              <h2 className="text-2xl font-semibold text-[#2B5219] mb-4">Why Choose Us?</h2>
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-[#2B5219] rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-white text-xl">🌱</span>
-                  </div>
-                  <h3 className="font-semibold mb-2">Eco-Friendly</h3>
-                  <p className="text-sm text-gray-600">All products are sustainably sourced and environmentally conscious</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-[#2B5219] rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-white text-xl">🏆</span>
-                  </div>
-                  <h3 className="font-semibold mb-2">Quality Assured</h3>
-                  <p className="text-sm text-gray-600">Rigorous quality checks ensure you get the best products</p>
-                </div>
-                <div className="text-center">
-                  <div className="w-12 h-12 bg-[#2B5219] rounded-full flex items-center justify-center mx-auto mb-4">
-                    <span className="text-white text-xl">🚚</span>
-                  </div>
-                  <h3 className="font-semibold mb-2">Fast Delivery</h3>
-                  <p className="text-sm text-gray-600">Quick and eco-friendly packaging and delivery</p>
-                </div>
-              </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-medium text-gray-900 mb-2">🚚 Fast Delivery</h3>
+              <p className="text-sm">Quick and reliable shipping across India with eco-friendly packaging.</p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-medium text-gray-900 mb-2">💚 Community Impact</h3>
+              <p className="text-sm">Supporting local artisans and eco-conscious brands across India.</p>
+            </div>
+            <div className="bg-gray-50 p-4 rounded-lg">
+              <h3 className="font-medium text-gray-900 mb-2">🔒 Trust</h3>
+              <p className="text-sm">Transparent business practices and customer-first approach.</p>
             </div>
           </div>
         </div>
+
+        <p className="text-center font-medium text-green-600 text-lg">
+          Join us in creating a more sustainable future, one purchase at a time.
+        </p>
       </div>
     </div>
-  )
+  );
 } 

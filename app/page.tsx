@@ -91,7 +91,7 @@ export default function HomePage() {
             <div className="flex flex-wrap justify-center gap-6">
               {categories.map((category) => (
                 <Link 
-                  href={`/categories/${category.id}`} 
+                  href="/products" 
                   key={category.id}
                   className="group w-full sm:w-[280px]"
                 >
@@ -139,9 +139,14 @@ export default function HomePage() {
                         <span className="text-sm text-gray-600">{product.rating} ({product.reviews})</span>
                       </div>
                     </div>
-                    <Button className="w-full bg-[#2B5219] hover:bg-[#1a3110] text-white">
-                      Add to Cart
-                    </Button>
+                    <div className="space-y-2">
+                      <Button className="w-full bg-[#2B5219] hover:bg-[#1a3110] text-white">
+                        Add to Cart
+                      </Button>
+                      <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
+                        Buy Now
+                      </Button>
+                    </div>
                   </div>
                 </Link>
               ))}
