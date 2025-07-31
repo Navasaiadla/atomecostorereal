@@ -41,10 +41,21 @@ export function RazorpayButton({
     const script = document.createElement('script')
     script.src = 'https://checkout.razorpay.com/v1/checkout.js'
     script.async = true
+    
+    script.onload = () => {
+      console.log('Razorpay script loaded successfully')
+    }
+    
+    script.onerror = () => {
+      console.error('Failed to load Razorpay script')
+    }
+    
     document.body.appendChild(script)
 
     return () => {
-      document.body.removeChild(script)
+      if (document.body.contains(script)) {
+        document.body.removeChild(script)
+      }
     }
   }, [])
 
@@ -54,6 +65,7 @@ export function RazorpayButton({
       console.log('Starting payment process...')
       console.log('Amount:', amount)
       console.log('Currency:', currency)
+      console.log('Client Key ID:', process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID)
       
       // Check if Razorpay key is configured
       if (!process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID === 'rzp_test_your_key_id_here') {
@@ -94,46 +106,60 @@ export function RazorpayButton({
           email: customerEmail,
           contact: customerPhone,
         },
-                 handler: async function (response: any) {
-           try {
-             // Verify payment
-             const verifyResponse = await fetch('/api/payment/verify', {
-               method: 'POST',
-               headers: {
-                 'Content-Type': 'application/json',
-               },
-               body: JSON.stringify({
-                 razorpay_order_id: response.razorpay_order_id,
-                 razorpay_payment_id: response.razorpay_payment_id,
-                 razorpay_signature: response.razorpay_signature,
-               }),
-             })
+        handler: {
+          payment_success: async function (response: any) {
+            try {
+              console.log('Payment success response:', response)
+              // Verify payment
+              const verifyResponse = await fetch('/api/payment/verify', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                }),
+              })
 
-             const verifyData = await verifyResponse.json()
+              const verifyData = await verifyResponse.json()
+              console.log('Verification response:', verifyData)
 
-             if (verifyData.success) {
-               onSuccess?.(response)
-               // Redirect to success page with payment details
-               window.location.href = `/payment-success?payment_id=${response.razorpay_payment_id}&order_id=${response.razorpay_order_id}`
-             } else {
-               onFailure?.(verifyData.error)
-               // Redirect to failure page
-               window.location.href = `/payment-failed?error_code=VERIFICATION_FAILED&error_description=${encodeURIComponent(verifyData.error)}&order_id=${response.razorpay_order_id}`
-             }
-                    } catch (error) {
-           onFailure?.(error)
-           // Redirect to failure page
-           const errorMessage = error instanceof Error ? error.message : 'Network error occurred'
-           window.location.href = `/payment-failed?error_code=NETWORK_ERROR&error_description=${encodeURIComponent(errorMessage)}&order_id=${response.razorpay_order_id || 'unknown'}`
-         }
-         },
-                 modal: {
-           ondismiss: function () {
-             setLoading(false)
-             // Redirect to failure page when modal is dismissed
-             window.location.href = `/payment-failed?error_code=PAYMENT_CANCELLED&error_description=Payment was cancelled by user&order_id=${orderData.order.id}`
-           },
-         },
+              if (verifyData.success) {
+                onSuccess?.(response)
+                // Redirect to success page with payment details
+                window.location.href = `/payment-success?payment_id=${response.razorpay_payment_id}&order_id=${response.razorpay_order_id}`
+              } else {
+                console.error('Payment verification failed:', verifyData.error)
+                onFailure?.(verifyData.error)
+                // Redirect to failure page
+                window.location.href = `/payment-failed?error_code=VERIFICATION_FAILED&error_description=${encodeURIComponent(verifyData.error)}&order_id=${response.razorpay_order_id}`
+              }
+            } catch (error) {
+              console.error('Payment verification error:', error)
+              onFailure?.(error)
+              // Redirect to failure page
+              const errorMessage = error instanceof Error ? error.message : 'Network error occurred'
+              window.location.href = `/payment-failed?error_code=NETWORK_ERROR&error_description=${encodeURIComponent(errorMessage)}&order_id=${response.razorpay_order_id || 'unknown'}`
+            }
+          },
+          payment_failed: function (response: any) {
+            console.error('Payment failed response:', response)
+            console.error('Payment failed error details:', response.error)
+            onFailure?.(response.error)
+            // Redirect to failure page
+            window.location.href = `/payment-failed?error_code=PAYMENT_FAILED&error_description=${encodeURIComponent(response.error?.description || 'Payment failed')}&order_id=${response.razorpay_order_id || orderData.order.id}`
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            setLoading(false)
+            console.log('Payment modal dismissed by user')
+            // Redirect to failure page when modal is dismissed
+            window.location.href = `/payment-failed?error_code=PAYMENT_CANCELLED&error_description=Payment was cancelled by user&order_id=${orderData.order.id}`
+          },
+        },
         theme: {
           color: '#2B5219',
         },
