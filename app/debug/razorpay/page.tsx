@@ -29,7 +29,11 @@ export default function RazorpayDebugPage() {
     setEnvStatus({
       clientKeyId,
       clientKeyIdExists: !!clientKeyId,
-      clientKeyIdValid: clientKeyId && clientKeyId.startsWith('rzp_') && clientKeyId !== 'rzp_test_your_key_id_here',
+      clientKeyIdValid: Boolean(
+        clientKeyId &&
+        clientKeyId.startsWith('rzp_') &&
+        clientKeyId !== 'rzp_test_your_key_id_here'
+      ),
       clientKeyIdLength: clientKeyId?.length || 0
     })
   }, [])
