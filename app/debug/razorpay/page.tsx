@@ -3,9 +3,24 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 
+interface EnvStatus {
+  clientKeyId?: string
+  clientKeyIdExists: boolean
+  clientKeyIdValid: boolean
+  clientKeyIdLength: number
+  server?: any
+}
+
+interface OrderTest {
+  status: number | string
+  success: boolean
+  data?: any
+  error?: string
+}
+
 export default function RazorpayDebugPage() {
-  const [envStatus, setEnvStatus] = useState<any>(null)
-  const [orderTest, setOrderTest] = useState<any>(null)
+  const [envStatus, setEnvStatus] = useState<EnvStatus | null>(null)
+  const [orderTest, setOrderTest] = useState<OrderTest | null>(null)
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -56,7 +71,13 @@ export default function RazorpayDebugPage() {
     try {
       const response = await fetch('/api/test-env')
       const data = await response.json()
-      setEnvStatus(prev => ({ ...prev, server: data }))
+      setEnvStatus((prev: EnvStatus | null) => prev ? { ...prev, server: data } : { 
+        clientKeyId: '',
+        clientKeyIdExists: false,
+        clientKeyIdValid: false,
+        clientKeyIdLength: 0,
+        server: data 
+      })
     } catch (error) {
       console.error('Error testing server env:', error)
     } finally {
