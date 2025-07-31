@@ -120,11 +120,12 @@ export function RazorpayButton({
                // Redirect to failure page
                window.location.href = `/payment-failed?error_code=VERIFICATION_FAILED&error_description=${encodeURIComponent(verifyData.error)}&order_id=${response.razorpay_order_id}`
              }
-           } catch (error) {
-             onFailure?.(error)
-             // Redirect to failure page
-             window.location.href = `/payment-failed?error_code=NETWORK_ERROR&error_description=${encodeURIComponent(error.message || 'Network error occurred')}&order_id=${response.razorpay_order_id || 'unknown'}`
-           }
+                    } catch (error) {
+           onFailure?.(error)
+           // Redirect to failure page
+           const errorMessage = error instanceof Error ? error.message : 'Network error occurred'
+           window.location.href = `/payment-failed?error_code=NETWORK_ERROR&error_description=${encodeURIComponent(errorMessage)}&order_id=${response.razorpay_order_id || 'unknown'}`
+         }
          },
                  modal: {
            ondismiss: function () {
