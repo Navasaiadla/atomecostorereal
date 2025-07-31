@@ -157,14 +157,14 @@ export default function HomePage() {
                         </div>
                       </div>
                     </Link>
-                    <div className="p-6 pt-0 space-y-4">
-                      <button className="w-full bg-[#2B5219] hover:bg-[#1a3110] text-white py-3 font-semibold rounded-lg transition-all duration-200 hover:scale-105">
-                        Add to Cart
-                      </button>
-                      <Link href="/checkout" className="block w-full bg-orange-500 hover:bg-orange-600 text-white py-3 font-semibold rounded-lg transition-all duration-200 hover:scale-105 text-center">
-                        Buy Now
-                      </Link>
-                    </div>
+                                         <div className="p-6 pt-0 pb-12 space-y-2 mt-4">
+                       <button className="w-full bg-[#2B5219] hover:bg-[#1a3110] text-white py-3 font-semibold rounded-lg transition-all duration-200 hover:scale-105">
+                         Add to Cart
+                       </button>
+                       <Link href="/checkout" className="block w-full bg-orange-500 hover:bg-orange-600 text-white py-3 font-semibold rounded-lg transition-all duration-200 hover:scale-105 text-center">
+                         Buy Now
+                       </Link>
+                     </div>
                   </div>
                 </div>
               ))}

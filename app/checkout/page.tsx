@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Header } from '@/components/ui/header'
 import { Footer } from '@/components/ui/footer'
+import { RazorpayButton } from '@/components/ui/razorpay-button'
 
 export default function CheckoutPage() {
   const [formData, setFormData] = useState({
@@ -27,11 +28,27 @@ export default function CheckoutPage() {
     }))
   }
 
+  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'failed'>('idle')
+  const [paymentMessage, setPaymentMessage] = useState('')
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // Handle checkout logic here
     console.log('Checkout data:', formData)
-    alert('Order placed successfully!')
+  }
+
+  const handlePaymentSuccess = (response: any) => {
+    setPaymentStatus('success')
+    setPaymentMessage('Payment successful! Your order has been placed.')
+    console.log('Payment successful:', response)
+    // Here you can redirect to success page or show success message
+  }
+
+  const handlePaymentFailure = (error: any) => {
+    setPaymentStatus('failed')
+    const errorMessage = error?.message || error?.toString() || 'Payment failed. Please try again.'
+    setPaymentMessage(errorMessage)
+    console.error('Payment failed:', error)
   }
 
   return (
@@ -194,18 +211,54 @@ export default function CheckoutPage() {
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#2B5219]"
                     >
                       <option value="cod">Cash on Delivery</option>
-                      <option value="upi">UPI</option>
-                      <option value="card">Credit/Debit Card</option>
-                      <option value="netbanking">Net Banking</option>
+                      <option value="razorpay">Online Payment (Razorpay)</option>
                     </select>
                   </div>
 
-                  <Button 
-                    type="submit" 
-                    className="w-full bg-[#2B5219] hover:bg-[#1a3110] text-white py-3 text-lg font-semibold"
-                  >
-                    Place Order
-                  </Button>
+                  {/* Payment Status Messages */}
+                  {paymentStatus === 'success' && (
+                    <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                      <div className="flex items-center gap-2 text-green-700">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="font-medium">{paymentMessage}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {paymentStatus === 'failed' && (
+                    <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+                      <div className="flex items-center gap-2 text-red-700">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        <span className="font-medium">{paymentMessage}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Payment Buttons */}
+                  {formData.paymentMethod === 'razorpay' ? (
+                    <RazorpayButton
+                      amount={269} // Total amount from order summary
+                      customerName={`${formData.firstName} ${formData.lastName}`}
+                      customerEmail={formData.email}
+                      customerPhone={formData.phone}
+                      onSuccess={handlePaymentSuccess}
+                      onFailure={handlePaymentFailure}
+                      className="w-full bg-[#2B5219] hover:bg-[#1a3110] text-white py-3 text-lg font-semibold"
+                    >
+                      Pay ₹269
+                    </RazorpayButton>
+                  ) : (
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-[#2B5219] hover:bg-[#1a3110] text-white py-3 text-lg font-semibold"
+                    >
+                      Place Order (Cash on Delivery)
+                    </Button>
+                  )}
                 </form>
               </div>
 
