@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Script from 'next/script'
 import { Button } from './button'
 
 declare global {
@@ -36,28 +37,7 @@ export function RazorpayButton({
 }: RazorpayButtonProps) {
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    // Load Razorpay script
-    const script = document.createElement('script')
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js'
-    script.async = true
-    
-    script.onload = () => {
-      console.log('Razorpay script loaded successfully')
-    }
-    
-    script.onerror = () => {
-      console.error('Failed to load Razorpay script')
-    }
-    
-    document.body.appendChild(script)
-
-    return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script)
-      }
-    }
-  }, [])
+  // Remove the manual script loading useEffect since we'll use Next.js Script component
 
   const handlePayment = async () => {
     setLoading(true)
@@ -176,12 +156,24 @@ export function RazorpayButton({
   }
 
   return (
-    <Button
-      onClick={handlePayment}
-      disabled={loading}
-      className={className}
-    >
-      {loading ? 'Processing...' : children || 'Pay Now'}
-    </Button>
+    <>
+      <Script
+        src="https://checkout.razorpay.com/v1/checkout.js"
+        strategy="beforeInteractive"
+        onLoad={() => {
+          console.log('Razorpay script loaded successfully')
+        }}
+        onError={() => {
+          console.error('Failed to load Razorpay script')
+        }}
+      />
+      <Button
+        onClick={handlePayment}
+        disabled={loading}
+        className={className}
+      >
+        {loading ? 'Processing...' : children || 'Pay Now'}
+      </Button>
+    </>
   )
 } 
