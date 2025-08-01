@@ -18,11 +18,11 @@ const getRazorpayInstance = () => {
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('Creating Razorpay order...')
-    console.log('Server Key ID:', process.env.RAZORPAY_KEY_ID)
-    console.log('Server Key Secret exists:', !!process.env.RAZORPAY_KEY_SECRET)
-    
-    // Get Razorpay instance with proper error handling
+    console.log("🔐 DEBUG: Checking Razorpay env variables...");
+console.log("RAZORPAY_KEY_ID:", process.env.RAZORPAY_KEY_ID);
+console.log("RAZORPAY_KEY_SECRET exists:", !!process.env.RAZORPAY_KEY_SECRET);
+
+      // Get Razorpay instance with proper error handling
     let razorpay
     try {
       razorpay = getRazorpayInstance()
