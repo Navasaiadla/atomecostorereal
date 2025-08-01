@@ -51,6 +51,10 @@ export default function CheckoutPage() {
     console.error('Payment failed:', error)
   }
 
+  // Check if Razorpay is properly configured
+  const isRazorpayConfigured = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID && 
+    process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID !== 'rzp_test_your_key_id_here'
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -240,17 +244,28 @@ export default function CheckoutPage() {
 
                   {/* Payment Buttons */}
                   {formData.paymentMethod === 'razorpay' ? (
-                    <RazorpayButton
-                      amount={269} // Total amount from order summary
-                      customerName={`${formData.firstName} ${formData.lastName}`}
-                      customerEmail={formData.email}
-                      customerPhone={formData.phone}
-                      onSuccess={handlePaymentSuccess}
-                      onFailure={handlePaymentFailure}
-                      className="w-full bg-[#2B5219] hover:bg-[#1a3110] text-white py-3 text-lg font-semibold"
-                    >
-                      Pay ₹269
-                    </RazorpayButton>
+                    isRazorpayConfigured ? (
+                      <RazorpayButton
+                        amount={269} // Total amount from order summary
+                        customerName={`${formData.firstName} ${formData.lastName}`}
+                        customerEmail={formData.email}
+                        customerPhone={formData.phone}
+                        onSuccess={handlePaymentSuccess}
+                        onFailure={handlePaymentFailure}
+                        className="w-full bg-[#2B5219] hover:bg-[#1a3110] text-white py-3 text-lg font-semibold"
+                      >
+                        Pay ₹269
+                      </RazorpayButton>
+                    ) : (
+                      <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-800">
+                        <div className="flex items-center gap-2">
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.93 1.75a2.25 2.25 0 01-3.69-2.103V6.75A2.25 2.25 0 016.75 4.5h10.5a2.25 2.25 0 012.25 2.25v10.5a2.25 2.25 0 01-2.25 2.25H6.75a2.25 2.25 0 01-2.25-2.25V13.5a2.25 2.25 0 012.103-2.249M12 13.5V10.5" />
+                          </svg>
+                          <span>Razorpay is not configured. Please contact administrator.</span>
+                        </div>
+                      </div>
+                    )
                   ) : (
                     <Button 
                       type="submit" 
