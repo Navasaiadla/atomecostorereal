@@ -72,17 +72,32 @@ export default function CheckoutPage() {
 
   // Check if form is valid for payment
   const isFormValid = () => {
-    return formData.firstName.trim() && 
-           formData.lastName.trim() && 
-           formData.email.trim() && 
-           /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) &&
-           formData.phone.trim() && 
-           /^[0-9]{10}$/.test(formData.phone.replace(/\s/g, '')) &&
-           formData.address.trim() && 
-           formData.city.trim() && 
-           formData.state.trim() && 
-           formData.pincode.trim() && 
-           /^[0-9]{6}$/.test(formData.pincode)
+    const firstNameValid = formData.firstName.trim().length > 0
+    const lastNameValid = formData.lastName.trim().length > 0
+    const emailValid = formData.email.trim().length > 0 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)
+    const phoneValid = formData.phone.trim().length > 0 && /^[0-9]{10}$/.test(formData.phone.replace(/\s/g, ''))
+    const addressValid = formData.address.trim().length > 0
+    const cityValid = formData.city.trim().length > 0
+    const stateValid = formData.state.trim().length > 0
+    const pincodeValid = formData.pincode.trim().length > 0 && /^[0-9]{6}$/.test(formData.pincode)
+    
+    const isValid = firstNameValid && lastNameValid && emailValid && phoneValid && 
+                   addressValid && cityValid && stateValid && pincodeValid
+    
+    // Debug logging
+    console.log('Form validation:', {
+      firstName: firstNameValid,
+      lastName: lastNameValid,
+      email: emailValid,
+      phone: phoneValid,
+      address: addressValid,
+      city: cityValid,
+      state: stateValid,
+      pincode: pincodeValid,
+      isValid
+    })
+    
+    return isValid
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -115,10 +130,16 @@ export default function CheckoutPage() {
   }
 
   const handlePaymentSuccess = (response: any) => {
+    console.log('✅ handlePaymentSuccess called with:', response)
     setPaymentStatus('success')
-    setPaymentMessage('Payment successful! Your order has been placed.')
+    setPaymentMessage(`Payment successful! Order ID: ${response.razorpay_order_id}`)
     console.log('Payment successful:', response)
-    // Here you can redirect to success page or show success message
+    
+    // Redirect to home page after successful payment
+    setTimeout(() => {
+      console.log('🔄 Redirecting to home page...')
+      window.location.href = '/'
+    }, 3000) // Redirect after 3 seconds to show success message
   }
 
   const handlePaymentFailure = (error: any) => {
@@ -332,17 +353,61 @@ export default function CheckoutPage() {
                     </select>
                   </div>
 
-                  {/* Payment Status Messages */}
-                  {paymentStatus === 'success' && (
-                    <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                      <div className="flex items-center gap-2 text-green-700">
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                        </svg>
-                        <span className="font-medium">{paymentMessage}</span>
+                  {/* Form Validation Status */}
+                  {formData.paymentMethod === 'razorpay' && (
+                    <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                      <h3 className="font-medium text-blue-900 mb-2">Form Validation Status:</h3>
+                      <div className="grid grid-cols-2 gap-2 text-sm">
+                        <div className={`flex items-center gap-2 ${formData.firstName.trim() ? 'text-green-600' : 'text-red-600'}`}>
+                          <span>{formData.firstName.trim() ? '✅' : '❌'}</span>
+                          <span>First Name</span>
+                        </div>
+                        <div className={`flex items-center gap-2 ${formData.lastName.trim() ? 'text-green-600' : 'text-red-600'}`}>
+                          <span>{formData.lastName.trim() ? '✅' : '❌'}</span>
+                          <span>Last Name</span>
+                        </div>
+                        <div className={`flex items-center gap-2 ${formData.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) ? 'text-green-600' : 'text-red-600'}`}>
+                          <span>{formData.email.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) ? '✅' : '❌'}</span>
+                          <span>Email</span>
+                        </div>
+                        <div className={`flex items-center gap-2 ${formData.phone.trim() && /^[0-9]{10}$/.test(formData.phone.replace(/\s/g, '')) ? 'text-green-600' : 'text-red-600'}`}>
+                          <span>{formData.phone.trim() && /^[0-9]{10}$/.test(formData.phone.replace(/\s/g, '')) ? '✅' : '❌'}</span>
+                          <span>Phone (10 digits)</span>
+                        </div>
+                        <div className={`flex items-center gap-2 ${formData.address.trim() ? 'text-green-600' : 'text-red-600'}`}>
+                          <span>{formData.address.trim() ? '✅' : '❌'}</span>
+                          <span>Address</span>
+                        </div>
+                        <div className={`flex items-center gap-2 ${formData.city.trim() ? 'text-green-600' : 'text-red-600'}`}>
+                          <span>{formData.city.trim() ? '✅' : '❌'}</span>
+                          <span>City</span>
+                        </div>
+                        <div className={`flex items-center gap-2 ${formData.state.trim() ? 'text-green-600' : 'text-red-600'}`}>
+                          <span>{formData.state.trim() ? '✅' : '❌'}</span>
+                          <span>State</span>
+                        </div>
+                        <div className={`flex items-center gap-2 ${formData.pincode.trim() && /^[0-9]{6}$/.test(formData.pincode) ? 'text-green-600' : 'text-red-600'}`}>
+                          <span>{formData.pincode.trim() && /^[0-9]{6}$/.test(formData.pincode) ? '✅' : '❌'}</span>
+                          <span>Pincode (6 digits)</span>
+                        </div>
                       </div>
                     </div>
                   )}
+
+                                     {/* Payment Status Messages */}
+                   {paymentStatus === 'success' && (
+                     <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                       <div className="flex items-center gap-2 text-green-700 mb-2">
+                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                         </svg>
+                         <span className="font-medium">{paymentMessage}</span>
+                       </div>
+                       <p className="text-sm text-green-600">
+                         Redirecting to home page in 2 seconds...
+                       </p>
+                     </div>
+                   )}
 
                   {paymentStatus === 'failed' && (
                     <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
@@ -360,11 +425,14 @@ export default function CheckoutPage() {
                     <div>
                       {!isFormValid() && (
                         <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-4">
-                          <div className="flex items-center gap-2 text-yellow-700">
+                          <div className="flex items-center gap-2 text-yellow-700 mb-2">
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
                             </svg>
                             <span className="font-medium">Please fill in all required fields before proceeding to payment</span>
+                          </div>
+                          <div className="text-sm text-yellow-600">
+                            <p>Required fields: First Name, Last Name, Email, Phone (10 digits), Address, City, State, Pincode (6 digits)</p>
                           </div>
                         </div>
                       )}
@@ -375,9 +443,9 @@ export default function CheckoutPage() {
                         customerPhone={formData.phone}
                         onSuccess={handlePaymentSuccess}
                         onFailure={handlePaymentFailure}
-                        className={`w-full py-3 text-lg font-semibold ${
+                        className={`w-full py-3 text-lg font-semibold transition-all duration-200 ${
                           isFormValid() 
-                            ? 'bg-[#2B5219] hover:bg-[#1a3110] text-white cursor-pointer' 
+                            ? 'bg-[#2B5219] hover:bg-[#1a3110] text-white cursor-pointer shadow-lg hover:shadow-xl' 
                             : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                         }`}
                         disabled={!isFormValid()}

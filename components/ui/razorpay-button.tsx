@@ -158,50 +158,41 @@ export function RazorpayButton({
             email: customerEmail,
             contact: customerPhone,
           },
-          handler: {
-            payment_success: async function (response: any) {
-              try {
-                console.log('Payment success response:', response)
-                // Verify payment
-                const verifyResponse = await fetch('/api/payment/verify', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    razorpay_order_id: response.razorpay_order_id,
-                    razorpay_payment_id: response.razorpay_payment_id,
-                    razorpay_signature: response.razorpay_signature,
-                  }),
-                })
+          handler: async function (response: any) {
+            try {
+              console.log('Payment success response:', response)
+              // Verify payment
+              const verifyResponse = await fetch('/api/payment/verify', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_signature: response.razorpay_signature,
+                }),
+              })
 
-                const verifyData = await verifyResponse.json()
-                console.log('Verification response:', verifyData)
+              const verifyData = await verifyResponse.json()
+              console.log('Verification response:', verifyData)
 
-                if (verifyData.success) {
-                  onSuccess?.(response)
-                  // Redirect to success page with payment details
-                  window.location.href = `/payment-success?payment_id=${response.razorpay_payment_id}&order_id=${response.razorpay_order_id}`
-                } else {
-                  console.error('Payment verification failed:', verifyData.error)
-                  onFailure?.(verifyData.error)
-                  // Redirect to failure page
-                  window.location.href = `/payment-failed?error_code=VERIFICATION_FAILED&error_description=${encodeURIComponent(verifyData.error)}&order_id=${response.razorpay_order_id}`
-                }
-              } catch (error) {
-                console.error('Payment verification error:', error)
-                onFailure?.(error)
+              if (verifyData.success) {
+                console.log('✅ Payment verified successfully, calling onSuccess callback')
+                onSuccess?.(response)
+                // Don't redirect here - let the parent component handle the redirect
+              } else {
+                console.error('Payment verification failed:', verifyData.error)
+                onFailure?.(verifyData.error)
                 // Redirect to failure page
-                const errorMessage = error instanceof Error ? error.message : 'Network error occurred'
-                window.location.href = `/payment-failed?error_code=NETWORK_ERROR&error_description=${encodeURIComponent(errorMessage)}&order_id=${response.razorpay_order_id || 'unknown'}`
+                window.location.href = `/payment-failed?error_code=VERIFICATION_FAILED&error_description=${encodeURIComponent(verifyData.error)}&order_id=${response.razorpay_order_id}`
               }
-            },
-            payment_failed: function (response: any) {
-              console.error('Payment failed response:', response)
-              console.error('Payment failed error details:', response.error)
-              onFailure?.(response.error)
+            } catch (error) {
+              console.error('Payment verification error:', error)
+              onFailure?.(error)
               // Redirect to failure page
-              window.location.href = `/payment-failed?error_code=PAYMENT_FAILED&error_description=${encodeURIComponent(response.error?.description || 'Payment failed')}&order_id=${response.razorpay_order_id || orderData.order.id}`
+              const errorMessage = error instanceof Error ? error.message : 'Network error occurred'
+              window.location.href = `/payment-failed?error_code=NETWORK_ERROR&error_description=${encodeURIComponent(errorMessage)}&order_id=${response.razorpay_order_id || 'unknown'}`
             }
           },
           modal: {
@@ -211,6 +202,13 @@ export function RazorpayButton({
               // Redirect to failure page when modal is dismissed
               window.location.href = `/payment-failed?error_code=PAYMENT_CANCELLED&error_description=Payment was cancelled by user&order_id=${orderData.order.id}`
             },
+          },
+          cancel: function (response: any) {
+            setLoading(false)
+            console.log('Payment cancelled by user:', response)
+            onFailure?.({ message: 'Payment was cancelled by user' })
+            // Redirect to failure page
+            window.location.href = `/payment-failed?error_code=PAYMENT_CANCELLED&error_description=Payment was cancelled by user&order_id=${orderData.order.id}`
           },
           theme: {
             color: '#2B5219',
