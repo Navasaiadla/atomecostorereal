@@ -20,21 +20,98 @@ export default function CheckoutPage() {
     paymentMethod: 'cod'
   })
 
+  const [formErrors, setFormErrors] = useState<{[key: string]: string}>({})
+  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'failed'>('idle')
+  const [paymentMessage, setPaymentMessage] = useState('')
+
+  // Validation function
+  const validateForm = () => {
+    const errors: {[key: string]: string} = {}
+    
+    if (!formData.firstName.trim()) {
+      errors.firstName = 'First name is required'
+    }
+    
+    if (!formData.lastName.trim()) {
+      errors.lastName = 'Last name is required'
+    }
+    
+    if (!formData.email.trim()) {
+      errors.email = 'Email is required'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = 'Please enter a valid email address'
+    }
+    
+    if (!formData.phone.trim()) {
+      errors.phone = 'Phone number is required'
+    } else if (!/^[0-9]{10}$/.test(formData.phone.replace(/\s/g, ''))) {
+      errors.phone = 'Please enter a valid 10-digit phone number'
+    }
+    
+    if (!formData.address.trim()) {
+      errors.address = 'Address is required'
+    }
+    
+    if (!formData.city.trim()) {
+      errors.city = 'City is required'
+    }
+    
+    if (!formData.state.trim()) {
+      errors.state = 'State is required'
+    }
+    
+    if (!formData.pincode.trim()) {
+      errors.pincode = 'Pincode is required'
+    } else if (!/^[0-9]{6}$/.test(formData.pincode)) {
+      errors.pincode = 'Please enter a valid 6-digit pincode'
+    }
+    
+    setFormErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
+  // Check if form is valid for payment
+  const isFormValid = () => {
+    return formData.firstName.trim() && 
+           formData.lastName.trim() && 
+           formData.email.trim() && 
+           /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) &&
+           formData.phone.trim() && 
+           /^[0-9]{10}$/.test(formData.phone.replace(/\s/g, '')) &&
+           formData.address.trim() && 
+           formData.city.trim() && 
+           formData.state.trim() && 
+           formData.pincode.trim() && 
+           /^[0-9]{6}$/.test(formData.pincode)
+  }
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({
       ...prev,
       [name]: value
     }))
+    
+    // Clear error when user starts typing
+    if (formErrors[name]) {
+      setFormErrors(prev => ({
+        ...prev,
+        [name]: ''
+      }))
+    }
   }
-
-  const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success' | 'failed'>('idle')
-  const [paymentMessage, setPaymentMessage] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
+    
+    if (!validateForm()) {
+      setPaymentMessage('Please fill in all required fields correctly.')
+      return
+    }
+    
     // Handle checkout logic here
     console.log('Checkout data:', formData)
+    // Here you can proceed with the order placement
   }
 
   const handlePaymentSuccess = (response: any) => {
@@ -86,8 +163,13 @@ export default function CheckoutPage() {
                         required
                         value={formData.firstName}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#2B5219]"
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                          formErrors.firstName ? 'border-red-500' : 'border-gray-300'
+                        }`}
                       />
+                      {formErrors.firstName && (
+                        <p className="text-red-500 text-sm mt-1">{formErrors.firstName}</p>
+                      )}
                     </div>
                     <div>
                       <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
@@ -100,8 +182,13 @@ export default function CheckoutPage() {
                         required
                         value={formData.lastName}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#2B5219]"
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                          formErrors.lastName ? 'border-red-500' : 'border-gray-300'
+                        }`}
                       />
+                      {formErrors.lastName && (
+                        <p className="text-red-500 text-sm mt-1">{formErrors.lastName}</p>
+                      )}
                     </div>
                   </div>
 
@@ -117,8 +204,13 @@ export default function CheckoutPage() {
                         required
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#2B5219]"
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                          formErrors.email ? 'border-red-500' : 'border-gray-300'
+                        }`}
                       />
+                      {formErrors.email && (
+                        <p className="text-red-500 text-sm mt-1">{formErrors.email}</p>
+                      )}
                     </div>
                     <div>
                       <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
@@ -131,8 +223,13 @@ export default function CheckoutPage() {
                         required
                         value={formData.phone}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#2B5219]"
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                          formErrors.phone ? 'border-red-500' : 'border-gray-300'
+                        }`}
                       />
+                      {formErrors.phone && (
+                        <p className="text-red-500 text-sm mt-1">{formErrors.phone}</p>
+                      )}
                     </div>
                   </div>
 
@@ -148,9 +245,14 @@ export default function CheckoutPage() {
                       required
                       value={formData.address}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#2B5219]"
+                      className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                        formErrors.address ? 'border-red-500' : 'border-gray-300'
+                      }`}
                       placeholder="Enter your complete address"
                     />
+                    {formErrors.address && (
+                      <p className="text-red-500 text-sm mt-1">{formErrors.address}</p>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -165,8 +267,13 @@ export default function CheckoutPage() {
                         required
                         value={formData.city}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#2B5219]"
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                          formErrors.city ? 'border-red-500' : 'border-gray-300'
+                        }`}
                       />
+                      {formErrors.city && (
+                        <p className="text-red-500 text-sm mt-1">{formErrors.city}</p>
+                      )}
                     </div>
                     <div>
                       <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-2">
@@ -179,8 +286,13 @@ export default function CheckoutPage() {
                         required
                         value={formData.state}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#2B5219]"
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                          formErrors.state ? 'border-red-500' : 'border-gray-300'
+                        }`}
                       />
+                      {formErrors.state && (
+                        <p className="text-red-500 text-sm mt-1">{formErrors.state}</p>
+                      )}
                     </div>
                     <div>
                       <label htmlFor="pincode" className="block text-sm font-medium text-gray-700 mb-2">
@@ -193,8 +305,13 @@ export default function CheckoutPage() {
                         required
                         value={formData.pincode}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#2B5219]"
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                          formErrors.pincode ? 'border-red-500' : 'border-gray-300'
+                        }`}
                       />
+                      {formErrors.pincode && (
+                        <p className="text-red-500 text-sm mt-1">{formErrors.pincode}</p>
+                      )}
                     </div>
                   </div>
 
@@ -240,17 +357,34 @@ export default function CheckoutPage() {
 
                   {/* Payment Buttons */}
                   {formData.paymentMethod === 'razorpay' ? (
-                    <RazorpayButton
-                      amount={269} // Total amount from order summary
-                      customerName={`${formData.firstName} ${formData.lastName}`}
-                      customerEmail={formData.email}
-                      customerPhone={formData.phone}
-                      onSuccess={handlePaymentSuccess}
-                      onFailure={handlePaymentFailure}
-                      className="w-full bg-[#2B5219] hover:bg-[#1a3110] text-white py-3 text-lg font-semibold"
-                    >
-                      Pay ₹269
-                    </RazorpayButton>
+                    <div>
+                      {!isFormValid() && (
+                        <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-4">
+                          <div className="flex items-center gap-2 text-yellow-700">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                            </svg>
+                            <span className="font-medium">Please fill in all required fields before proceeding to payment</span>
+                          </div>
+                        </div>
+                      )}
+                      <RazorpayButton
+                        amount={269} // Total amount from order summary
+                        customerName={`${formData.firstName} ${formData.lastName}`}
+                        customerEmail={formData.email}
+                        customerPhone={formData.phone}
+                        onSuccess={handlePaymentSuccess}
+                        onFailure={handlePaymentFailure}
+                        className={`w-full py-3 text-lg font-semibold ${
+                          isFormValid() 
+                            ? 'bg-[#2B5219] hover:bg-[#1a3110] text-white cursor-pointer' 
+                            : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        }`}
+                        disabled={!isFormValid()}
+                      >
+                        {isFormValid() ? 'Pay ₹269' : 'Fill all fields to proceed'}
+                      </RazorpayButton>
+                    </div>
                   ) : (
                     <Button 
                       type="submit" 

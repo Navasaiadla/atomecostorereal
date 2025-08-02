@@ -20,6 +20,7 @@ interface RazorpayButtonProps {
   onFailure?: (error: any) => void
   className?: string
   children?: React.ReactNode
+  disabled?: boolean
 }
 
 export function RazorpayButton({
@@ -32,7 +33,8 @@ export function RazorpayButton({
   onSuccess,
   onFailure,
   className,
-  children
+  children,
+  disabled = false
 }: RazorpayButtonProps) {
   const [loading, setLoading] = useState(false)
   const [scriptLoaded, setScriptLoaded] = useState(false)
@@ -88,6 +90,10 @@ export function RazorpayButton({
   }, [])
 
   const handlePayment = async () => {
+    if (disabled) {
+      return
+    }
+    
     setLoading(true)
     try {
       console.log('Starting payment process...')
@@ -232,7 +238,7 @@ export function RazorpayButton({
   return (
     <Button
       onClick={handlePayment}
-      disabled={loading}
+      disabled={loading || disabled}
       className={className}
     >
       {loading ? 'Processing...' : children || 'Pay Now'}
