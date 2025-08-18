@@ -1,21 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(request: NextRequest) {
-  const keyId = process.env.RAZORPAY_KEY_ID
-  const keySecret = process.env.RAZORPAY_KEY_SECRET
-  const publicKeyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  const razorpayKeyId = process.env.RAZORPAY_KEY_ID
+  const razorpayKeySecret = process.env.RAZORPAY_KEY_SECRET
+  const publicRzpKey = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID
 
   return NextResponse.json({
-    hasKeyId: !!keyId,
-    hasKeySecret: !!keySecret,
-    hasPublicKeyId: !!publicKeyId,
-    keyIdLength: keyId?.length || 0,
-    keySecretLength: keySecret?.length || 0,
-    publicKeyIdLength: publicKeyId?.length || 0,
-    keyIdStartsWith: keyId?.startsWith('rzp_') || false,
-    publicKeyIdStartsWith: publicKeyId?.startsWith('rzp_') || false,
-    isDefaultKeyId: keyId === 'rzp_test_your_key_id_here',
-    isDefaultKeySecret: keySecret === 'your_key_secret_here',
-    isDefaultPublicKeyId: publicKeyId === 'rzp_test_your_key_id_here',
+    razorpay: {
+      hasKeyId: !!razorpayKeyId,
+      hasKeySecret: !!razorpayKeySecret,
+      hasPublicKeyId: !!publicRzpKey,
+      keyIdStartsWith: razorpayKeyId?.startsWith('rzp_') || false,
+      publicKeyIdStartsWith: publicRzpKey?.startsWith('rzp_') || false,
+    },
+    supabaseUrl: {
+      exists: !!supabaseUrl,
+      length: supabaseUrl?.length || 0,
+      value: supabaseUrl ? supabaseUrl.substring(0, 50) + '...' : null
+    },
+    supabaseAnonKey: {
+      exists: !!supabaseAnonKey,
+      length: supabaseAnonKey?.length || 0,
+      value: supabaseAnonKey ? supabaseAnonKey.substring(0, 50) + '...' : null
+    },
+    serviceKey: {
+      exists: !!serviceKey,
+      length: serviceKey?.length || 0,
+      value: serviceKey ? serviceKey.substring(0, 50) + '...' : null
+    },
+    allSet: !!(supabaseUrl && supabaseAnonKey && serviceKey),
+    anonKeyComplete: supabaseAnonKey && supabaseAnonKey.length > 200
   })
 } 

@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { Header } from '@/components/ui/header'
-import { Footer } from '@/components/ui/footer'
 
 export default function PaymentFailedPage() {
   const [errorDetails, setErrorDetails] = useState<any>(null)
@@ -42,9 +40,8 @@ export default function PaymentFailedPage() {
   }, [router])
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-red-50 to-pink-50">
-      <Header />
-      <main className="flex-1 flex items-center justify-center p-4">
+    <div className="bg-gradient-to-br from-red-50 to-pink-50">
+      <div className="flex items-center justify-center p-4 min-h-screen">
         <div className="max-w-2xl w-full">
           {/* Failure Content */}
           <div className="bg-white rounded-2xl p-8 shadow-xl text-center border border-red-100">
@@ -139,8 +136,7 @@ export default function PaymentFailedPage() {
             </div>
           </div>
         </div>
-      </main>
-      <Footer />
+      </div>
     </div>
   )
 } 

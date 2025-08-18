@@ -1,3 +1,89 @@
+# Payment + Shipment Flow
+
+## Overview
+
+This app collects buyer details during checkout, creates a Supabase `orders` row, processes payment with Razorpay, and on successful verification creates a shipment in Delhivery. We then persist the Delhivery waybill into `orders.metadata.shipment`.
+
+## End-to-end Steps
+
+1. Client triggers payment via `components/ui/razorpay-button.tsx`.
+   - Sends amount, currency, app_order_id, and shipping details (name/email/phone/address/city/state/pincode) to `/api/payment/create-order`.
+2. Server proxies to Supabase Edge Function `payments-create-order`.
+   - Inserts draft order in `orders` with `metadata.shipping`.
+   - Creates Razorpay order and saves `razorpay_order_id` to `orders`.
+3. Client opens Razorpay modal and completes payment.
+4. Client calls `/api/payment/verify` with Razorpay ids (order/payment/signature).
+5. Server proxies to `payments-verify` Edge Function.
+   - Verifies signature, marks `orders.status` = `paid`, upserts `payments`.
+6. On success, our route `app/api/payment/verify/route.ts` synchronously creates a Delhivery shipment using `lib/delhivery.ts`.
+   - Reads shipping details from `orders.metadata.shipping`.
+   - Sends shipment create request to Delhivery.
+   - Saves waybill and provider response in `orders.metadata.shipment`.
+   - Best-effort fetches packing slip.
+
+## Delhivery Payload Mapping
+
+We follow Delhivery's CMU create API as shown in their Python example, while including alternate keys accepted by some deployments. Body is sent as `application/x-www-form-urlencoded` with `format=json` and `data=<json>`.
+
+```
+format=json&data={
+  "shipments": [
+    {
+      "name": "<consignee name>",
+      "add": "<address>",
+      "pin": "<pincode>",
+      "city": "<city>",
+      "state": "<state>",
+      "country": "India",
+      "phone": "<phone>",
+      "email": "<email>",
+      "order": "<orderId>",
+      "payment_mode": "Prepaid" | "COD",
+      "cod_amount": <number>,
+      "shipment_width": "<cm>",
+      "shipment_height": "<cm>",
+      "weight": "<kg>",
+      "products_desc": "<joined item names>",
+
+      // Also sent for compatibility with variants
+      "consignee": "<consignee name>",
+      "address": "<address>",
+      "consignee_phone": "<phone>",
+      "consignee_email": "<email>"
+    }
+  ],
+  "pickup_location": { "name": "<warehouse_name>" }
+}
+```
+
+Notes:
+- We default missing shipping name to `nava`.
+- Ensure `<warehouse_name>` matches your pre-approved ClientWarehouse NAME in Delhivery.
+
+## Environment Variables
+
+Required:
+- `DELHIVERY_API_BASE` — e.g., `https://staging-express.delhivery.com` or prod base
+- `DELHIVERY_API_TOKEN`
+- `DELHIVERY_DEFAULT_PICKUP_NAME` — must match ClientWarehouse name
+- `DELHIVERY_DEFAULT_PICKUP_PIN` — your pickup pincode
+- `DELHIVERY_DEFAULT_PICKUP_PHONE` — your pickup phone
+- `EDGE_FUNCTIONS_SHARED_SECRET`, `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`
+- `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET`
+
+## Troubleshooting
+
+- Auth test: GET `/api/logistics/delhivery/auth/test` should return `ok: true` and 2xx.
+- If shipment fails, check `orders.metadata.shipment.provider_response` for exact message.
+  - Pickup not approved → Fix `DELHIVERY_DEFAULT_PICKUP_NAME` or get it approved.
+  - Invalid pincode/address → Correct consignee address/pincode.
+  - 404 base → Fix `DELHIVERY_API_BASE` to correct env.
+
+## Data Fields Summary
+
+- Sent to Delhivery: `name/add/pin/city/state/country/phone/email/order/payment_mode/cod_amount/weight/length/breadth/height/products_desc` and also `consignee/address/consignee_phone/consignee_email` for compatibility.
+- Inserted to `orders` on create: `user_id, status, amount, currency, idempotency_key, metadata.shipping{ name,address,city,state,pincode,email,phone }`.
+- Read for shipping: `orders.metadata.shipping` and optional `orders.metadata.parcel`.
 # 🎉 Complete Payment Flow with Success/Failure Pages
 
 ## ✅ **What I've Implemented**

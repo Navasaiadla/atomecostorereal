@@ -1,0 +1,12 @@
+project_id = "grdxbgawbqhsndmdgxxs"
+
+[functions.payments-create-order]
+verify_jwt = false
+
+[functions.payments-verify]
+verify_jwt = false
+
+[functions.payments-webhook]
+verify_jwt = false
+
+

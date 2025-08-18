@@ -1,76 +1,69 @@
 import { NextRequest, NextResponse } from 'next/server'
-import Razorpay from 'razorpay'
+import crypto from 'crypto'
+import { createServerSupabaseClient } from '@/lib/supabase-server'
 
-// Check if Razorpay keys are configured before creating the instance
-const getRazorpayInstance = () => {
-  const keyId = process.env.RAZORPAY_KEY_ID
-  const keySecret = process.env.RAZORPAY_KEY_SECRET
-  
-  if (!keyId || !keySecret || keyId === 'rzp_test_your_key_id_here' || keySecret === 'your_key_secret_here') {
-    throw new Error('Razorpay keys not configured properly')
-  }
-  
-  return new Razorpay({
-    key_id: keyId,
-    key_secret: keySecret,
-  })
-}
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
+// Proxy this route to Supabase Edge Function `payments-create-order`
 export async function POST(request: NextRequest) {
-  try {
-    console.log("🔐 DEBUG: Checking Razorpay env variables...");
-console.log("RAZORPAY_KEY_ID:", process.env.RAZORPAY_KEY_ID);
-console.log("RAZORPAY_KEY_SECRET exists:", !!process.env.RAZORPAY_KEY_SECRET);
-
-      // Get Razorpay instance with proper error handling
-    let razorpay
-    try {
-      razorpay = getRazorpayInstance()
-    } catch (error) {
-      console.error('Razorpay configuration error:', error)
-      return NextResponse.json(
-        { 
-          error: 'Razorpay configuration missing. Please add your actual Razorpay keys to .env.local file. Check SETUP_RAZORPAY_NOW.md for instructions.' 
-        },
-        { status: 500 }
-      )
-    }
-
-    const body = await request.json()
-    const { amount, currency = 'INR', receipt } = body
-
-    console.log('Request body:', body)
-
-    if (!amount) {
-      return NextResponse.json(
-        { error: 'Amount is required' },
-        { status: 400 }
-      )
-    }
-
-    const options = {
-      amount: amount * 100, // Razorpay expects amount in paise
-      currency,
-      receipt,
-      payment_capture: 1,
-    }
-
-    console.log('Creating order with options:', options)
-    const order = await razorpay.orders.create(options)
-    console.log('Order created successfully:', order)
-
-    return NextResponse.json({
-      success: true,
-      order,
-    })
-  } catch (error) {
-    console.error('Error creating order:', error)
-    return NextResponse.json(
-      { 
-        error: 'Failed to create order',
-        details: error instanceof Error ? error.message : 'Unknown error'
-      },
-      { status: 500 }
-    )
+  const secret = process.env.EDGE_FUNCTIONS_SHARED_SECRET
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  if (!secret || !supabaseUrl) {
+    return NextResponse.json({ error: 'Server not configured to call edge function' }, { status: 500 })
   }
-} 
+
+  const body = await request.json()
+  const amount = Number(body?.amount)
+  let idempotencyKey = (body?.app_order_id && typeof body.app_order_id === 'string')
+    ? body.app_order_id
+    : crypto.randomUUID()
+  // Ensure it's a UUID to satisfy edge function schema
+  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+  if (!uuidRegex.test(idempotencyKey)) idempotencyKey = crypto.randomUUID()
+  const transformed = {
+    ...body,
+    amount: Number.isFinite(amount) ? Math.round(amount * 100) : amount,
+    idempotency_key: idempotencyKey,
+  }
+  // amount should be in minor units already on client; if you used rupees, multiply by 100 at caller
+
+  // Derive the user's access token from cookies so orders get a non-null user_id
+  let authHeader = request.headers.get('Authorization') || undefined
+  try {
+    if (!authHeader) {
+      const supabase = createServerSupabaseClient()
+      const { data: { session } } = await supabase.auth.getSession()
+      if (session?.access_token) authHeader = `Bearer ${session.access_token}`
+    }
+  } catch {}
+  const resp = await fetch(`${supabaseUrl}/functions/v1/payments-create-order`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Internal-Secret': secret,
+      ...(authHeader ? { Authorization: authHeader } : {}),
+    },
+    body: JSON.stringify(transformed),
+  })
+
+  const text = await resp.text()
+  const data = (() => { try { return JSON.parse(text) } catch { return { raw: text } } })()
+
+  if (resp.ok && data?.razorpayOrderId && data?.amount && data?.currency) {
+    // Normalize to the shape expected by the client Razorpay button
+    const normalized = {
+      success: true,
+      order: {
+        id: data.razorpayOrderId,
+        amount: data.amount,
+        currency: data.currency,
+        receipt: data.orderId, // local order UUID stored as receipt in provider
+      },
+    }
+    return NextResponse.json(normalized, { status: 200 })
+  }
+
+  return NextResponse.json(data, { status: resp.status })
+}

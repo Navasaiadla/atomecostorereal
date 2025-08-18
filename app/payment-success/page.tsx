@@ -4,12 +4,10 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { Header } from '@/components/ui/header'
-import { Footer } from '@/components/ui/footer'
 
 export default function PaymentSuccessPage() {
   const [orderDetails, setOrderDetails] = useState<any>(null)
-  const [countdown, setCountdown] = useState(10)
+  const [countdown, setCountdown] = useState(1)
   const router = useRouter()
 
   useEffect(() => {
@@ -17,35 +15,46 @@ export default function PaymentSuccessPage() {
     const urlParams = new URLSearchParams(window.location.search)
     const paymentId = urlParams.get('payment_id')
     const orderId = urlParams.get('order_id')
-    
-    if (paymentId && orderId) {
+
+    async function loadOrderAmount(razorpayOrderId: string) {
+      try {
+        const res = await fetch(`/api/payment/order-details?order_id=${encodeURIComponent(razorpayOrderId)}`, { cache: 'no-store' })
+        if (res.ok) {
+          const data = await res.json()
+          const amountDisplay = typeof data?.amountRupees === 'number' ? `₹${data.amountRupees}` : (data?.amountFormatted || '')
+          setOrderDetails({
+            paymentId: paymentId || '',
+            orderId: razorpayOrderId,
+            amount: amountDisplay || '—',
+            date: new Date().toLocaleDateString('en-IN'),
+            time: new Date().toLocaleTimeString('en-IN')
+          })
+          return
+        }
+      } catch {}
+      // Fallback without amount
       setOrderDetails({
-        paymentId,
-        orderId,
-        amount: '₹269', // You can make this dynamic
+        paymentId: paymentId || '',
+        orderId: razorpayOrderId,
+        amount: '—',
         date: new Date().toLocaleDateString('en-IN'),
         time: new Date().toLocaleTimeString('en-IN')
       })
     }
 
-    // Auto redirect countdown
-    const timer = setInterval(() => {
-      setCountdown((prev) => {
-        if (prev <= 1) {
-          router.push('/')
-          return 0
-        }
-        return prev - 1
-      })
-    }, 1000)
+    if (orderId) {
+      void loadOrderAmount(orderId)
+    }
 
-    return () => clearInterval(timer)
+    // Auto redirect countdown (fast)
+    const t = setTimeout(() => router.replace('/orders'), 1200)
+
+    return () => clearTimeout(t)
   }, [router])
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-green-50 to-emerald-50">
-      <Header />
-      <main className="flex-1 flex items-center justify-center p-4">
+    <div className="bg-gradient-to-br from-green-50 to-emerald-50">
+      <div className="flex items-center justify-center p-4 min-h-screen">
         <div className="max-w-2xl w-full">
           {/* Success Content */}
           <div className="bg-white rounded-2xl p-8 shadow-xl text-center border border-green-100">
@@ -134,8 +143,7 @@ export default function PaymentSuccessPage() {
             </div>
           </div>
         </div>
-      </main>
-      <Footer />
+      </div>
     </div>
   )
 } 

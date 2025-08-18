@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
+import { Providers } from './providers'
+import { Header } from '@/components/ui/header'
+import { Footer } from '@/components/ui/footer'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -27,7 +30,17 @@ export default function RootLayout({
           id="razorpay-script"
         />
       </head>
-      <body className={`${inter.className} h-full`}>{children}</body>
+      <body className={`${inter.className} h-full`}>
+        <Providers>
+          <div className="min-h-screen flex flex-col">
+            <Header />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </div>
+        </Providers>
+      </body>
     </html>
   )
 }
