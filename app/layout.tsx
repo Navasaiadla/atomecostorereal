@@ -6,6 +6,9 @@ import { Header } from '@/components/ui/header'
 import { Footer } from '@/components/ui/footer'
 import './globals.css'
 
+// Prevent Vercel from prerendering pages that need runtime env/auth
+export const dynamic = 'force-dynamic'
+
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
