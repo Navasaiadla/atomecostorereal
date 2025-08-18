@@ -27,7 +27,10 @@ export async function GET(request: NextRequest) {
     const list = reviews || []
 
     // Fetch reviewer names (no FK join assumed)
-    const userIds = Array.from(new Set(list.map(r => r.user_id).filter(Boolean)))
+    const userIds = Array.from(new Set((list as Array<{ user_id: string | null }>).
+      map((r: { user_id: string | null }) => r.user_id).
+      filter((v: string | null): v is string => Boolean(v))
+    ))
     let idToProfile: Record<string, { full_name: string | null; email: string | null }> = {}
     if (userIds.length > 0) {
       const { data: profiles, error: pErr } = await supabase
@@ -41,7 +44,8 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    const enriched = list.map(r => ({
+    const enriched = (list as Array<{ user_id: string }>).
+      map((r: { user_id: string }) => ({
       ...r,
       reviewer_name: idToProfile[r.user_id]?.full_name || idToProfile[r.user_id]?.email || 'Anonymous',
       reviewer_email: idToProfile[r.user_id]?.email || null,

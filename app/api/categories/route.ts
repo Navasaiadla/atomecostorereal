@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 
@@ -28,7 +29,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Transform categories to match frontend expectations
-    const transformedCategories = categories.map(cat => ({
+    const transformedCategories = (categories as Array<{ id: string; Category?: string }>).map((cat: { id: string; Category?: string }) => ({
       id: cat.id,
       name: cat.Category || 'Unnamed Category', // Use the 'Category' field from database
       description: `${cat.Category || 'Eco-friendly'} products`,

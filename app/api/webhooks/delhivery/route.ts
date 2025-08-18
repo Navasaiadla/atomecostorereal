@@ -61,38 +61,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, error: e?.message || 'webhook_failed' }, { status: 500 })
   }
 }
-
-import { NextResponse } from 'next/server'
-import { verifyWebhookSignature } from '@/lib/delhivery'
-
-export const runtime = 'nodejs'
-
-export async function POST(req: Request) {
-	const signature = req.headers.get('x-delhivery-signature') || req.headers.get('x-hub-signature')
-	const raw = await req.text()
-	const valid = verifyWebhookSignature(raw, signature)
-	if (!valid) return NextResponse.json({ ok: false, error: 'invalid signature' }, { status: 401 })
-
-	try {
-		const payload = JSON.parse(raw)
-		const event = {
-			eventId: payload?.event_id || payload?.id || null,
-			awb: payload?.awb || payload?.waybill || payload?.shipment?.waybill || null,
-			status: payload?.status || payload?.current_status || null,
-			description: payload?.remarks || payload?.description || null,
-			eventTime: payload?.time || payload?.timestamp || new Date().toISOString(),
-			location: payload?.location || null,
-			raw: payload
-		}
-		return NextResponse.json({ ok: true, event })
-	} catch (e: any) {
-		return NextResponse.json({ ok: false, error: e?.message || 'bad payload' }, { status: 400 })
-	}
-}
-
-export async function GET() {
-	return NextResponse.json({ ok: true })
-}
-
-
-

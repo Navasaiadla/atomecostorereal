@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       items: transformedItems,
-      totalItems: transformedItems.reduce((sum, item) => sum + item.quantity, 0)
+      totalItems: transformedItems.reduce((sum: number, item: { quantity: number }) => sum + item.quantity, 0)
     })
   } catch (error) {
     console.error('Cart API error:', error)

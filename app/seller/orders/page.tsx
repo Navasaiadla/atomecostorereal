@@ -96,7 +96,9 @@ export default async function OrdersPage({ searchParams }: { searchParams: { [ke
         .from('products')
         .select('id, title')
         .in('id', Array.from(productIds))
-      productIdToTitle = Object.fromEntries((products || []).map(p => [p.id, p.title]))
+      productIdToTitle = Object.fromEntries(((products || []) as Array<{ id: string; title: string }>).
+        map((p: { id: string; title: string }) => [p.id, p.title])
+      )
     }
 
     // 4) Build lines from order_items

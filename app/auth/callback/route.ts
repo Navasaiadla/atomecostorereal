@@ -5,9 +5,9 @@ import { createAdminClient } from '@/lib/supabase'
 // Single GET handler: handles both OAuth code exchange and password reset redirect
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url)
-  // If Supabase sent password-reset session via hash, just show the UI page
+  // If Supabase sent password-reset session via hash, redirect to reset UI
   if (requestUrl.hash) {
-    return NextResponse.redirect(new URL('/auth/callback', requestUrl.origin))
+    return NextResponse.redirect(new URL('/auth/reset', requestUrl.origin))
   }
   const code = requestUrl.searchParams.get('code')
 

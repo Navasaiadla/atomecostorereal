@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 
@@ -62,7 +63,8 @@ export async function GET(request: NextRequest) {
 
     let totalRevenue = 0
     if (!revenueError && revenueData) {
-      totalRevenue = revenueData.reduce((sum, order) => sum + (order.total_amount || 0), 0)
+      const rows = (revenueData as Array<{ total_amount: number | null }>)
+      totalRevenue = rows.reduce((sum: number, order: { total_amount: number | null }) => sum + (order.total_amount ?? 0), 0)
     }
 
     // Get recent orders

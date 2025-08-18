@@ -87,7 +87,10 @@ export async function GET(
     let totalReviews = 0
 
     if (reviews && reviews.length > 0) {
-      const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0)
+      const totalRating = (reviews as Array<{ rating: number }>).reduce(
+        (sum: number, review: { rating: number }) => sum + review.rating,
+        0
+      )
       averageRating = totalRating / reviews.length
       totalReviews = reviews.length
     }

@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic'
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/lib/supabase-server'
 
@@ -74,9 +75,11 @@ export async function GET(request: NextRequest) {
 
     let totalInventoryValue = 0
     if (!inventoryError && inventoryData) {
-      totalInventoryValue = inventoryData.reduce((sum, product) => {
-        return sum + ((product.price || 0) * (product.stock || 0))
-      }, 0)
+      const rows = (inventoryData as Array<{ price: number | null; stock: number | null }>)
+      totalInventoryValue = rows.reduce(
+        (sum: number, product: { price: number | null; stock: number | null }) => sum + ((product.price ?? 0) * (product.stock ?? 0)),
+        0
+      )
     } else if (inventoryError) {
       console.error('Error fetching inventory data:', inventoryError)
     }

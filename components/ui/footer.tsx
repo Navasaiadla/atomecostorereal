@@ -19,8 +19,8 @@ export function Footer() {
           </p>
         </div>
 
-        {/* Bottom Row - 4 Columns centered */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-5xl mx-auto text-center">
+        {/* Bottom Row - 4 Columns, left-aligned */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 max-w-5xl mx-auto text-left">
 
           {/* Quick Links */}
           <div>
@@ -80,20 +80,26 @@ export function Footer() {
           <div>
             <h3 className="font-medium text-white mb-2 md:mb-4 text-xs md:text-base">Contact Us</h3>
             <ul className="space-y-1 md:space-y-3">
-                              <li>
-                  <a href="mailto:atomecostores@gmail.com" className="text-gray-300 hover:text-white flex items-center gap-2 text-xs md:text-sm">
-                    <span>📧</span>
-                    <span className="hidden sm:inline">atomecostores@gmail.com</span>
-                    <span className="sm:hidden">Email</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="tel:+919390119683" className="text-gray-300 hover:text-white flex items-center gap-2 text-xs md:text-sm">
-                    <span>📞</span>
-                    <span className="hidden sm:inline">+91 9390119683</span>
-                    <span className="sm:hidden">Call</span>
-                  </a>
-                </li>
+              <li>
+                <a
+                  href="mailto:atomecostores@gmail.com"
+                  aria-label="Email atomecostores@gmail.com"
+                  className="text-gray-300 hover:text-white flex items-center gap-2 text-xs md:text-sm"
+                >
+                  <span>📧</span>
+                  <span>atomecostores@gmail.com</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href="tel:+919390119683"
+                  aria-label="Call +91 9390119683"
+                  className="text-gray-300 hover:text-white flex items-center gap-2 text-xs md:text-sm"
+                >
+                  <span>📞</span>
+                  <span>+91 9390119683</span>
+                </a>
+              </li>
             </ul>
           </div>
 

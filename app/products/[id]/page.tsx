@@ -59,17 +59,18 @@ export default function ProductDetailPage() {
   useEffect(() => {
     if (!product) return
     const controller = new AbortController()
-    async function fetchRelated() {
+    const currentProduct = product
+    async function fetchRelated(prod: Product) {
       try {
         setRelatedError(null)
         setRelatedLoading(true)
         const params = new URLSearchParams()
-        if (product.categoryId) params.set('category', product.categoryId)
+        if (prod.categoryId) params.set('category', prod.categoryId)
         params.set('limit', '8')
         const res = await fetch(`/api/products?${params.toString()}`, { signal: controller.signal })
         if (!res.ok) throw new Error('Failed to fetch related products')
         const data = await res.json()
-        const items: RelatedProduct[] = (data.products || []).filter((p: any) => p.id !== product.id)
+        const items: RelatedProduct[] = (data.products || []).filter((p: any) => p.id !== prod.id)
         setRelated(items)
       } catch (e) {
         if ((e as any)?.name === 'AbortError') return
@@ -78,7 +79,7 @@ export default function ProductDetailPage() {
         setRelatedLoading(false)
       }
     }
-    fetchRelated()
+    fetchRelated(currentProduct)
     return () => controller.abort()
   }, [product])
 

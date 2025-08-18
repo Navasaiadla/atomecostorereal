@@ -97,6 +97,59 @@ export default async function HomePage() {
   const featuredProducts = await getFeaturedProducts()
   const palette = ['bg-green-50', 'bg-amber-50', 'bg-blue-50', 'bg-purple-50']
 
+  // Fallbacks to avoid an empty-looking homepage when DB has no data
+  const fallbackCategories: { id: string; name: string }[] = [
+    { id: 'household', name: 'Household' },
+    { id: 'apparel', name: 'Apparel' },
+    { id: 'kitchen', name: 'Kitchen' },
+    { id: 'stationery', name: 'Stationery' },
+  ]
+
+  const fallbackFeatured: Product[] = [
+    {
+      id: 'demo-1',
+      title: 'Organic Cotton T-Shirt',
+      description: 'Soft, breathable, and sustainably made.',
+      price: 599,
+      stock: 100,
+      category_id: 'apparel',
+      is_active: true,
+      created_at: new Date().toISOString(),
+      images: ['/tshirt.webp'],
+      sale_price: null,
+      seller_id: 'demo'
+    },
+    {
+      id: 'demo-2',
+      title: 'Bamboo Utensils Set',
+      description: 'Reusable cutlery for eco-friendly dining.',
+      price: 299,
+      stock: 100,
+      category_id: 'kitchen',
+      is_active: true,
+      created_at: new Date().toISOString(),
+      images: ['/products/bamboo-utensils.svg'],
+      sale_price: null,
+      seller_id: 'demo'
+    },
+    {
+      id: 'demo-3',
+      title: 'Eco Tote Bag',
+      description: 'Durable reusable tote for everyday use.',
+      price: 199,
+      stock: 100,
+      category_id: 'household',
+      is_active: true,
+      created_at: new Date().toISOString(),
+      images: ['/bags.png'],
+      sale_price: null,
+      seller_id: 'demo'
+    }
+  ]
+
+  const categoriesToShow = (liveCategories.length > 0 ? liveCategories : fallbackCategories)
+  const featuredToShow = (featuredProducts.length > 0 ? featuredProducts : fallbackFeatured)
+
   return (
     <>
       {/* Hero Section - full screen carousel */}
@@ -104,8 +157,9 @@ export default async function HomePage() {
           <HeroCarousel
             className="absolute inset-0"
             slides={[
-              { src: '/a-website-banner-for-an-eco-conscious-li_vs27Cs_QR1aDAT7oKa93Lw_Ag6Y1ErKRn2c8TAgLZHf0A.jpeg', alt: 'Shop Smart, Live Green - Banner 2' },
-              { src: '/we%20Have%20only%20one%20______%20one%20Earth%20keep%20it%20safe%20(1).png', alt: 'We have only one Earth - keep it safe', fit: 'cover' }
+              { src: '/a-website-banner-for-an-eco-conscious-li_vs27Cs_QR1aDAT7oKa93Lw_Ag6Y1ErKRn2c8TAgLZHf0A.jpeg', alt: 'Shop Smart, Live Green' },
+              { src: '/a-website-banner-for-an-eco-conscious-li_CdhdK6yCSyq1gzTX2jtQ0A_Ag6Y1ErKRn2c8TAgLZHf0A.jpeg', alt: 'Eco-Conscious Lifestyle Banner' },
+              { src: '/a-website-banner-for-an-eco-friendly-hom_Xx1zeewXS1yW7gTkylBhTA_2c39gh9OSEyzNu549m-x1A.jpeg', alt: 'Eco-Friendly Home Products' }
             ]}
             priority
           />
@@ -119,7 +173,7 @@ export default async function HomePage() {
               Find exactly what you need in our curated categories
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-              {(liveCategories.length > 0 ? liveCategories : [{ id: 'all', name: 'All' }]).map((category, idx) => (
+              {categoriesToShow.map((category, idx) => (
                 <Link 
                   href={`/products?category=${encodeURIComponent(category.id)}`} 
                   key={category.id}
@@ -145,9 +199,9 @@ export default async function HomePage() {
               Handpicked sustainable products for conscious living
             </p>
             
-            {featuredProducts.length > 0 ? (
+            {featuredToShow.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 max-w-6xl mx-auto mb-8">
-                {featuredProducts.map((product) => (
+                {featuredToShow.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`} className="group block">
                     <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-[340px] md:h-[380px] overflow-hidden border border-gray-100 cursor-pointer">
                       <div className="relative h-40 md:h-44">
@@ -194,17 +248,7 @@ export default async function HomePage() {
                   </Link>
                 ))}
               </div>
-            ) : (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center">
-                  <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                  </svg>
-                </div>
-                <p className="text-gray-500 mb-4">No featured products available yet</p>
-                <p className="text-sm text-gray-400">Check back soon for new eco-friendly products!</p>
-              </div>
-            )}
+            ) : null}
             
             <div className="text-center mt-8 md:mt-12">
               <Link href="/products" className="inline-block bg-sky-500 hover:bg-sky-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg transition-colors">
