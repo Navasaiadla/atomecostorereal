@@ -192,57 +192,78 @@ export default function ProductDetailPage() {
 
   return (
     <div className="bg-gradient-to-br from-green-50 via-white to-emerald-50">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-2 sm:px-4 pt-4 pb-4 md:pb-8">
         <div className="max-w-6xl mx-auto">
-          {/* Breadcrumb */}
-          <nav className="flex items-center space-x-2 text-sm text-gray-500 mb-8">
-            <Link href="/" className="hover:text-[#2B5219]">Home</Link>
-            <span>/</span>
-            <Link href="/products" className="hover:text-[#2B5219]">Products</Link>
-            <span>/</span>
-            <span className="text-gray-900">{product.name}</span>
-          </nav>
+          
 
           {/* Product Details */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-12">
             {/* Product Images (Gallery) */}
             <div className="space-y-4">
               <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                <div className="relative h-96 lg:h-[500px]">
+                <div className="relative h-72 sm:h-96 lg:h-[500px]">
                   <img
-                    src={(product.images?.[activeIndex] ?? product.image) || '/bamboo-utensils.svg'}
+                    src={(product.images?.[activeIndex] ?? product.image) || '/products/bamboo-utensils.svg'}
                     alt={product.name}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.currentTarget.src = '/bamboo-utensils.svg'
+                      e.currentTarget.src = '/products/bamboo-utensils.svg'
                     }}
                   />
                 </div>
               </div>
 
               {product.images && product.images.length > 1 && (
-                <div className="grid grid-cols-5 gap-2">
-                  {product.images.slice(0, 5).map((img, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => setActiveIndex(idx)}
-                      className={`relative h-20 rounded-lg overflow-hidden border ${
-                        activeIndex === idx ? 'border-[#2B5219]' : 'border-gray-200'
-                      }`}
-                      aria-label={`View image ${idx + 1}`}
-                    >
-                      <img
-                        src={img || '/bamboo-utensils.svg'}
-                        alt={`${product.name} thumbnail ${idx + 1}`}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.currentTarget.src = '/bamboo-utensils.svg'
-                        }}
-                      />
-                    </button>
-                  ))}
-                </div>
+                <>
+                  <div className="md:hidden -mx-1 overflow-x-auto">
+                    <div className="flex gap-2 px-1">
+                      {product.images.slice(0, 8).map((img, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setActiveIndex(idx)}
+                          className={`relative h-16 w-16 rounded-lg overflow-hidden border ${
+                            activeIndex === idx ? 'border-[#2B5219]' : 'border-gray-200'
+                          } flex-shrink-0`}
+                          aria-label={`View image ${idx + 1}`}
+                        >
+                          <img
+                            src={img || '/products/bamboo-utensils.svg'}
+                            alt={`${product.name} thumbnail ${idx + 1}`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = '/products/bamboo-utensils.svg'
+                            }}
+                            loading="lazy"
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="hidden md:grid grid-cols-5 gap-2">
+                    {product.images.slice(0, 5).map((img, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => setActiveIndex(idx)}
+                        className={`relative h-20 rounded-lg overflow-hidden border ${
+                          activeIndex === idx ? 'border-[#2B5219]' : 'border-gray-200'
+                        }`}
+                        aria-label={`View image ${idx + 1}`}
+                      >
+                        <img
+                          src={img || '/products/bamboo-utensils.svg'}
+                          alt={`${product.name} thumbnail ${idx + 1}`}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.src = '/products/bamboo-utensils.svg'
+                          }}
+                          loading="lazy"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </>
               )}
             </div>
 
@@ -250,29 +271,29 @@ export default function ProductDetailPage() {
             <div className="space-y-6">
               {/* Tag */}
               <div>
-                <span className="inline-block bg-amber-100 text-amber-800 text-sm px-3 py-1 rounded-full font-medium">
+                <span className="inline-block bg-amber-100 text-amber-800 text-xs px-2 py-0.5 rounded-full font-medium">
                   {product.tag}
                 </span>
               </div>
 
               {/* Title */}
-              <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
                 {product.name}
               </h1>
 
               {/* Earth Rating and Impact */}
               <div className="flex items-center gap-2">
-                <img src="/globe with no background.png" alt="Earth" className="w-5 h-5" />
-                <span className="text-gray-800 font-medium">Earth rating {Math.round(product.rating * 10) / 10}</span>
-                <span className="text-gray-500">({product.reviews} reviews)</span>
-                <span className="ml-2 text-gray-400" title="Estimated environmental impact for large-scale adoption">i</span>
+                <img src="/globe with no background.png" alt="Earth" className="w-4 h-4" />
+                <span className="text-sm text-gray-800">Earth rating {Math.round(product.rating * 10) / 10}</span>
+                <span className="text-xs text-gray-500">({product.reviews} reviews)</span>
+                <span className="ml-2 text-xs text-gray-400" title="Estimated environmental impact for large-scale adoption">i</span>
               </div>
 
               {/* Price (show total for selected quantity) */}
               <div className="flex items-center gap-3">
-                <span className="text-3xl lg:text-4xl font-bold text-[#2B5219]">₹{product.price * quantity}</span>
+                <span className="text-3xl md:text-4xl font-bold text-[#2B5219]">₹{product.price * quantity}</span>
                 {product.originalPrice && product.originalPrice > product.price && (
-                  <span className="text-xl text-gray-400 line-through">₹{product.originalPrice}</span>
+                  <span className="text-lg sm:text-xl text-gray-400 line-through">₹{product.originalPrice}</span>
                 )}
                 {product.discount > 0 && (
                   <span className="bg-red-500 text-white text-sm font-bold px-2 py-1 rounded">
@@ -283,8 +304,8 @@ export default function ProductDetailPage() {
 
               {/* Description */}
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">Description</h3>
-                <p className="text-gray-600 leading-relaxed">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2">Description</h3>
+                <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
                   {product.description || 'No description available for this product.'}
                 </p>
               </div>
@@ -292,20 +313,20 @@ export default function ProductDetailPage() {
               {/* Stock visibility removed as requested */}
 
               {/* Quantity Selector */}
-              <div className="flex items-center gap-4">
-                <label className="text-sm font-medium text-gray-900">Quantity:</label>
-                <div className="flex items-center border border-gray-300 rounded-lg">
+              <div className="flex items-center gap-3">
+                <label className="text-xs font-medium text-gray-900">Quantity:</label>
+                <div className="flex items-center border border-gray-300 rounded-md">
                   <button
                     onClick={() => handleQuantityChange(quantity - 1)}
-                    className="px-3 py-2 text-gray-600 hover:text-[#2B5219] disabled:opacity-50"
+                    className="px-2.5 py-1.5 text-sm text-gray-600 hover:text-[#2B5219] disabled:opacity-50"
                     disabled={quantity <= 1}
                   >
                     -
                   </button>
-                  <span className="px-4 py-2 border-x border-gray-300">{quantity}</span>
+                  <span className="px-3 py-1.5 text-sm border-x border-gray-300">{quantity}</span>
                   <button
                     onClick={() => handleQuantityChange(quantity + 1)}
-                    className="px-3 py-2 text-gray-600 hover:text-[#2B5219] disabled:opacity-50"
+                    className="px-2.5 py-1.5 text-sm text-gray-600 hover:text-[#2B5219] disabled:opacity-50"
                     disabled={false}
                   >
                     +
@@ -314,7 +335,7 @@ export default function ProductDetailPage() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-4">
+              <div className="hidden md:flex gap-4">
                 <Button 
                   className="flex-1 h-12 bg-[#2B5219] hover:bg-[#1a3110] text-white text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                   disabled={product.stockQuantity === 0 || addingToCart}
@@ -339,18 +360,13 @@ export default function ProductDetailPage() {
                 </Button>
               </div>
 
-              {/* Category */}
-              <div className="pt-4 border-t border-gray-200">
-                <p className="text-sm text-gray-600">
-                  <span className="font-medium">Category:</span> {product.category}
-                </p>
-              </div>
+              {/* Category removed per request */}
             </div>
           </div>
 
           {/* Related Products */}
           <div className="mt-12">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Related products</h2>
+            <h2 className="text-base sm:text-lg md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">Related products</h2>
             {relatedLoading ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {Array.from({ length: 4 }).map((_, i) => (
@@ -364,18 +380,19 @@ export default function ProductDetailPage() {
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {related.slice(0, 8).map((rp) => (
-                  <Link key={rp.id} href={`/products/${rp.id}`} className="bg-white rounded-xl shadow hover:shadow-md transition-shadow overflow-hidden">
+                  <Link key={rp.id} href={`/products/${rp.id}`} target="_blank" rel="noopener noreferrer" className="bg-white rounded-xl shadow hover:shadow-md transition-shadow overflow-hidden">
                     <div className="relative h-36 bg-gray-100">
                       <img
-                        src={rp.images?.[0] || '/bamboo-utensils.svg'}
+                        src={rp.images?.[0] || '/products/bamboo-utensils.svg'}
                         alt={rp.title}
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          ;(e.currentTarget as HTMLImageElement).src = '/bamboo-utensils.svg'
+                          ;(e.currentTarget as HTMLImageElement).src = '/products/bamboo-utensils.svg'
                         }}
+                        loading="lazy"
                       />
                       <div className="absolute top-2 left-2">
-                        <span className="inline-block bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded-full font-medium">Eco-Friendly</span>
+                        <span className="inline-block bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded-full font-medium">Eco-Friendly</span>
                       </div>
                     </div>
                     <div className="p-3">
@@ -393,6 +410,26 @@ export default function ProductDetailPage() {
           {/* Reviews Section */}
           <div className="mt-12">
             <Reviews productId={productId} productName={product.name} />
+          </div>
+        </div>
+      </div>
+      {/* Mobile sticky CTA bar */}
+      <div className="fixed inset-x-0 bottom-0 z-40 bg-white/95 backdrop-blur border-t border-gray-200 p-3 md:hidden">
+        <div className="container mx-auto px-2">
+          <div className="flex gap-3">
+            <Button 
+              className="flex-1 h-12 bg-[#2B5219] hover:bg-[#1a3110] text-white text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={product?.stockQuantity === 0 || addingToCart}
+              onClick={handleAddToCart}
+            >
+              {addingToCart ? 'Adding...' : (product?.stockQuantity === 0 ? 'Out of Stock' : 'Add to Cart')}
+            </Button>
+            <Button
+              className="flex-1 h-12 bg-orange-500 hover:bg-orange-600 text-white text-base font-semibold"
+              onClick={handleBuyNow}
+            >
+              Buy Now
+            </Button>
           </div>
         </div>
       </div>

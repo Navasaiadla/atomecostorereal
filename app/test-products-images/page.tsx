@@ -91,7 +91,7 @@ export default function TestProductsImagesPage() {
                           className="w-full h-48 object-cover rounded-lg"
                           onError={(e) => {
                             console.log(`❌ Image failed to load for ${product.title}:`, product.images[0])
-                            e.currentTarget.src = '/bamboo-utensils.svg'
+                            e.currentTarget.src = '/products/bamboo-utensils.svg'
                           }}
                           onLoad={() => {
                             console.log(`✅ Image loaded successfully for ${product.title}:`, product.images[0])

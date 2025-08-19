@@ -166,24 +166,24 @@ export default async function HomePage() {
         </section>
 
         {/* Categories Section - Live from database */}
-        <section className="py-8 md:py-12 bg-white">
+        <section className="py-6 md:py-8 bg-white">
           <div className="container mx-auto px-4">
-            <h2 className="text-2xl md:text-3xl font-bold text-center mb-3 md:mb-4">Shop by Category</h2>
-            <p className="text-center text-gray-600 mb-6 md:mb-8 text-sm md:text-base px-4">
+            <h2 className="text-xl md:text-2xl font-bold text-center mb-2 md:mb-3">Shop by Category</h2>
+            <p className="text-center text-gray-600 mb-4 md:mb-6 text-xs md:text-sm px-4">
               Find exactly what you need in our curated categories
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
               {categoriesToShow.map((category, idx) => (
                 <Link 
                   href={`/products?category=${encodeURIComponent(category.id)}`} 
                   key={category.id}
-                  className={`group ${palette[idx % palette.length]} rounded-xl p-6 md:p-8 transition-all duration-200 hover:shadow-lg h-full block`}
+                  className={`group ${palette[idx % palette.length]} rounded-lg p-3 md:p-4 transition-all duration-200 hover:shadow-md h-full block`}
                 >
-                  <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">{category.name}</h3>
-                  <p className="text-gray-600 text-sm mb-4 md:mb-6">Explore our selection of {category.name} products</p>
+                  <h3 className="text-sm md:text-base font-semibold mb-2 md:mb-3">{category.name}</h3>
+                  <p className="text-gray-600 text-xs md:text-sm mb-3 md:mb-4">Explore our selection of {category.name} products</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-500">Browse</span>
-                    <span className="text-[#2B5219] group-hover:translate-x-2 transition-transform duration-200">→</span>
+                    <span className="text-xs md:text-sm text-gray-500">Browse</span>
+                    <span className="text-[#2B5219] group-hover:translate-x-1.5 transition-transform duration-200">→</span>
                   </div>
                 </Link>
               ))}
@@ -192,41 +192,38 @@ export default async function HomePage() {
         </section>
 
         {/* Featured Products - Live from database */}
-        <section className="py-12 md:py-16 bg-gray-50">
+        <section className="py-10 md:py-16 bg-gray-50">
           <div className="container mx-auto px-4">
             <h2 className="text-2xl md:text-3xl font-bold text-center mb-3 md:mb-4">Featured Products</h2>
-            <p className="text-center text-gray-600 mb-8 md:mb-12 text-sm md:text-base px-4">
+            <p className="text-center text-gray-600 mb-6 md:mb-12 text-sm md:text-base px-4">
               Handpicked sustainable products for conscious living
             </p>
             
             {featuredToShow.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 max-w-6xl mx-auto mb-8">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4 max-w-6xl mx-auto mb-6">
                 {featuredToShow.map((product) => (
-                  <Link key={product.id} href={`/products/${product.id}`} className="group block">
-                    <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col h-[340px] md:h-[380px] overflow-hidden border border-gray-100 cursor-pointer">
-                      <div className="relative h-40 md:h-44">
+                  <Link key={product.id} href={`/products/${product.id}`} target="_blank" rel="noopener noreferrer" className="group block">
+                    <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden border border-gray-100 cursor-pointer">
+                      <div className="relative h-28 md:h-36">
                         <Image
-                          src={product.images[0] || '/bamboo-utensils.svg'}
+                          src={product.images[0] || '/products/bamboo-utensils.svg'}
                           alt={product.title}
                           width={300}
                           height={220}
                           className="w-full h-full object-cover bg-gray-50 group-hover:scale-105 transition-transform duration-300"
                         />
-                        <span className="absolute top-2 left-2 bg-[#2B5219] text-white text-[10px] md:text-xs px-2 py-0.5 rounded-full font-semibold shadow-sm">
+                        <span className="absolute top-2 left-2 bg-[#2B5219] text-white text-[9px] md:text-xs px-1.5 py-0.5 rounded-full font-semibold shadow-sm">
                           Eco-Friendly
                         </span>
                         {product.sale_price && (
-                          <span className="absolute top-2 right-2 bg-red-500 text-white text-[10px] md:text-xs px-2 py-0.5 rounded-full font-semibold shadow-sm">
+                          <span className="absolute top-2 right-2 bg-red-500 text-white text-[9px] md:text-xs px-1.5 py-0.5 rounded-full font-semibold shadow-sm">
                             Sale
                           </span>
                         )}
                       </div>
-                      <div className="p-3 md:p-4 flex flex-col flex-grow">
-                        <h3 className="text-xs md:text-sm font-semibold text-gray-900 mb-1 md:mb-2 line-clamp-2 min-h-[2rem] md:min-h-[2rem]">{product.title}</h3>
-                        <p className="text-[11px] md:text-xs text-gray-600 mb-2 md:mb-3 line-clamp-2 flex-grow">
-                          {product.description || 'Eco-friendly product for sustainable living'}
-                        </p>
-                        <div className="flex items-center justify-between mb-2 md:mb-3">
+                      <div className="p-2 md:p-3 flex flex-col">
+                        <h3 className="text-xs md:text-sm font-semibold text-gray-900 mb-1 line-clamp-2">{product.title}</h3>
+                        <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1.5">
                             <span className="text-sm md:text-base font-bold text-[#2B5219]">
                               ₹{product.sale_price || product.price}
@@ -251,7 +248,7 @@ export default async function HomePage() {
             ) : null}
             
             <div className="text-center mt-8 md:mt-12">
-              <Link href="/products" className="inline-block bg-sky-500 hover:bg-sky-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg font-semibold text-base md:text-lg transition-colors">
+              <Link href="/products" className="inline-block bg-sky-500 hover:bg-sky-600 text-white px-4 md:px-6 py-2.5 md:py-3 rounded-md font-semibold text-sm md:text-base transition-colors">
                 View All Products
               </Link>
             </div>

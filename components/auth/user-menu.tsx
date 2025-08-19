@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { createClient } from '@/lib/supabase'
 import type { User } from '@supabase/supabase-js'
 
@@ -72,9 +73,9 @@ export function UserMenu() {
       <div className="relative">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center space-x-2 text-gray-700 hover:text-[#2B5219] transition-colors"
+          className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-gray-700 hover:text-[#2B5219]"
         >
-          <span className="hidden md:block">Login</span>
+          Login
           <svg
             className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`}
             fill="none"
@@ -103,20 +104,8 @@ export function UserMenu() {
               }}
               className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
             >
-              Sign up (new users)
+              Sign Up
             </button>
-            <div className="mt-1 pt-1 border-t border-gray-100">
-              <button
-                onClick={() => {
-                  router.push('/notifications')
-                  setIsOpen(false)
-                }}
-                className="flex items-center justify-between w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-              >
-                <span>Notifications</span>
-                <span className="ml-3 inline-flex items-center justify-center rounded-full bg-red-500 text-white text-xs font-semibold px-2 py-0.5">3</span>
-              </button>
-            </div>
           </div>
         )}
       </div>

@@ -130,16 +130,7 @@ export default function CheckoutPage() {
     <div className="bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          {/* Breadcrumb */}
-          <nav className="mb-8">
-            <ol className="flex items-center space-x-2 text-sm text-gray-600">
-              <li><Link href="/" className="hover:text-[#2B5219]">Home</Link></li>
-              <li>/</li>
-              <li><Link href="/cart" className="hover:text-[#2B5219]">Cart</Link></li>
-              <li>/</li>
-              <li className="text-gray-900">Checkout</li>
-            </ol>
-          </nav>
+          {/* Breadcrumb removed per request */}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
             {/* Checkout Form */}
@@ -374,7 +365,7 @@ export default function CheckoutPage() {
                   {(remoteTotals?.items || items).map((it: any) => (
                     <div key={it.id} className="flex items-center gap-4">
                       <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
-                        <img src={it.image || it.images?.[0] || '/bamboo-utensils.svg'} alt="" className="w-full h-full object-cover" onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/bamboo-utensils.svg' }} />
+                        <img src={it.image || it.images?.[0] || '/products/bamboo-utensils.svg'} alt="" className="w-full h-full object-cover" onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/products/bamboo-utensils.svg' }} />
                       </div>
                       <div className="flex-1">
                         <h3 className="font-semibold text-gray-900 line-clamp-1">{it.name || it.title}</h3>

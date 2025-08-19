@@ -16,11 +16,11 @@ export async function GET(request: NextRequest) {
       console.error('Error fetching categories from database:', error)
       // Fallback to default categories if database fails
       const fallbackCategories = [
-        { id: 'all', name: 'All', description: 'All products', image: '/bamboo-utensils.svg' },
-        { id: 'home-living', name: 'Home & Living', description: 'Eco-friendly home products', image: '/bamboo-utensils.svg' },
-        { id: 'personal-care', name: 'Personal Care', description: 'Natural personal care products', image: '/bamboo-utensils.svg' },
-        { id: 'kitchen', name: 'Kitchen & Dining', description: 'Sustainable kitchen products', image: '/bamboo-utensils.svg' },
-        { id: 'clothes', name: 'Clothes', description: 'Organic clothing', image: '/bamboo-utensils.svg' }
+        { id: 'all', name: 'All', description: 'All products', image: '/products/bamboo-utensils.svg' },
+        { id: 'home-living', name: 'Home & Living', description: 'Eco-friendly home products', image: '/products/bamboo-utensils.svg' },
+        { id: 'personal-care', name: 'Personal Care', description: 'Natural personal care products', image: '/products/bamboo-utensils.svg' },
+        { id: 'kitchen', name: 'Kitchen & Dining', description: 'Sustainable kitchen products', image: '/products/bamboo-utensils.svg' },
+        { id: 'clothes', name: 'Clothes', description: 'Organic clothing', image: '/products/bamboo-utensils.svg' }
       ]
       
       return NextResponse.json({
@@ -33,12 +33,12 @@ export async function GET(request: NextRequest) {
       id: cat.id,
       name: cat.Category || 'Unnamed Category', // Use the 'Category' field from database
       description: `${cat.Category || 'Eco-friendly'} products`,
-      image: '/bamboo-utensils.svg'
+      image: '/products/bamboo-utensils.svg'
     }))
 
     // Add "All" category at the beginning
     const allCategories = [
-      { id: 'all', name: 'All', description: 'All products', image: '/bamboo-utensils.svg' },
+      { id: 'all', name: 'All', description: 'All products', image: '/products/bamboo-utensils.svg' },
       ...transformedCategories
     ]
 

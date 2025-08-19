@@ -178,7 +178,7 @@ export function ProductsGrid() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 md:space-y-8">
       {/* Cart Messages */}
       {cartError && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -217,19 +217,19 @@ export function ProductsGrid() {
       )}
 
       {/* Category Filter */}
-      <div className="mb-8 md:mb-12">
-        <div className="flex flex-nowrap overflow-x-auto justify-start md:justify-center gap-2 md:gap-3 pb-2 md:pb-0">
+      <div className="mb-6 md:mb-12">
+        <div className="flex flex-nowrap overflow-x-auto justify-start md:justify-center gap-2 md:gap-3 pb-2 md:pb-0 -mx-2 px-2">
           {categories.map((category) => (
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
-              className={`group flex items-center gap-1 md:gap-2 px-3 md:px-6 py-2 md:py-3 rounded-full border-2 transition-all duration-300 transform hover:scale-105 whitespace-nowrap flex-shrink-0 ${
+              className={`group flex items-center gap-1 md:gap-2 px-3 md:px-6 py-2 md:py-3 rounded-full border transition-all duration-300 transform hover:scale-105 whitespace-nowrap flex-shrink-0 ${
                 selectedCategory === category.id
                   ? 'border-[#2B5219] bg-[#2B5219] text-white'
                   : 'border-gray-200 hover:border-[#2B5219] hover:bg-[#2B5219] hover:text-white'
               }`}
             >
-              <span className="text-sm md:text-lg">{getCategoryIcon(category.name)}</span>
+              <span className="text-base md:text-lg">{getCategoryIcon(category.name)}</span>
               <span className="font-medium text-xs md:text-sm lg:text-base">{category.name}</span>
             </button>
           ))}
@@ -248,39 +248,40 @@ export function ProductsGrid() {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           {products.map((product) => (
-            <Link key={product.id} href={`/products/${product.id}`} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 block">
+            <Link key={product.id} href={`/products/${product.id}`} target="_blank" rel="noopener noreferrer" className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 block">
               {/* Product Image */}
-              <div className="relative h-48 bg-gray-100">
+              <div className="relative h-36 sm:h-48 bg-gray-100">
                 <img
-                  src={product.images?.[0] || '/bamboo-utensils.svg'}
+                  src={product.images?.[0] || '/products/bamboo-utensils.svg'}
                   alt={product.title}
                   className="absolute inset-0 w-full h-full object-cover"
                   onError={(e) => {
-                    ;(e.currentTarget as HTMLImageElement).src = '/bamboo-utensils.svg'
+                    ;(e.currentTarget as HTMLImageElement).src = '/products/bamboo-utensils.svg'
                   }}
+                  loading="lazy"
                 />
                 <div className="absolute top-2 left-2">
-                  <span className="inline-block bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded-full font-medium">Eco-Friendly</span>
+                  <span className="inline-block bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded-full font-medium">Eco-Friendly</span>
                 </div>
               </div>
 
               {/* Product Info */}
               <div className="p-4">
-                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{product.title}</h3>
-                <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
+                <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 text-base">{product.title}</h3>
+                <p className="text-gray-600 text-xs sm:text-sm mb-3 line-clamp-2">{product.description}</p>
                 
                 {/* Price and Earth Rating */}
                 <div className="flex items-center justify-between">
                   <div>
-                    <span className="text-xl font-bold text-[#2B5219]">₹{product.price}</span>
+                    <span className="text-base sm:text-xl font-bold text-[#2B5219]">₹{product.price}</span>
                     {product.sale_price && product.sale_price < product.price && (
                       <span className="text-sm text-gray-500 line-through ml-2">₹{product.sale_price}</span>
                     )}
                   </div>
                   <div className="flex items-center gap-1 bg-green-50 px-1.5 py-0.5 rounded-full">
-                    <img src="/globe with no background.png" alt="Earth" className="w-4 h-4" />
+                    <img src="/globe with no background.png" alt="Earth" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     <span className="text-[10px] md:text-xs font-medium text-gray-700">Earth rating 4.5</span>
                   </div>
                 </div>

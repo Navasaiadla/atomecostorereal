@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
 
       if (productImages.length === 0) {
         // Fallback single placeholder if no images exist
-        productImages = ['/bamboo-utensils.svg']
+        productImages = ['/products/bamboo-utensils.svg']
       }
 
       return {

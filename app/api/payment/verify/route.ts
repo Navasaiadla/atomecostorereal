@@ -168,105 +168,52 @@ export async function POST(request: NextRequest) {
 
   // Normalize response for the client button to simply check `success`
   if (resp.ok) {
-    // Success: create shipment synchronously so it definitely happens
-    try {
-      const orderId = data?.orderId as string | undefined
-      if (orderId) {
+    // Return to client immediately for snappy UX
+    const quickResponse = NextResponse.json({ success: true, verification: data }, { status: 200 })
+
+    // Fire-and-forget fulfillment (non-blocking). Rely on webhooks as the source of truth.
+    Promise.resolve().then(async () => {
+      try {
+        const orderId = data?.orderId as string | undefined
+        if (!orderId) return
         const admin = createAdminClient()
-        // Load order with shipping fields
         const { data: orderRow, error: orderErr } = await admin
           .from('orders')
           .select('id, amount, metadata, razorpay_order_id')
           .eq('id', orderId)
           .single()
-        if (orderErr) {
-          console.error('fulfillment.load_order_failed', orderErr)
-          throw new Error('order_load_failed')
-        }
-
-        // Extract buyer shipping from orders.metadata
+        if (orderErr || !orderRow) return
         const meta = (orderRow?.metadata as any) || {}
-        // Resolve seller_id from metadata or fallback via product_id
+        // Resolve seller_id from metadata or fallback via product
         let sellerId: string | null = (meta as any)?.seller_id ?? null
         if (!sellerId) {
           try {
             const productId = (meta as any)?.product_id as string | undefined
             if (productId) {
-              const { data: prod, error: prodErr } = await admin
-                .from('products')
-                .select('seller_id')
-                .eq('id', productId)
-                .single()
-              if (!prodErr) sellerId = (prod as any)?.seller_id ?? null
+              const { data: prod } = await admin.from('products').select('seller_id').eq('id', productId).single()
+              if (prod) sellerId = (prod as any)?.seller_id ?? null
             }
           } catch {}
         }
         const shipRaw = (meta?.shipping as any) || {}
-        // Normalize/trim and set safe defaults
-        let derivedName = (() => {
-          const rawName = (shipRaw?.name ?? '') as string
-          if (rawName && rawName.trim().length > 0) return rawName.trim()
-          const firstSnake = (shipRaw?.first_name ?? '') as string
-          const lastSnake = (shipRaw?.last_name ?? '') as string
-          const firstCamel = (shipRaw?.firstName ?? '') as string
-          const lastCamel = (shipRaw?.lastName ?? '') as string
-          const first = (firstSnake || firstCamel).trim()
-          const last = (lastSnake || lastCamel).trim()
-          const full = [first, last].filter(Boolean).join(' ')
-          return full.trim()
-        })()
-
-        // If still no name, try pulling from Razorpay order notes (we set notes=metadata on create)
-        if (!derivedName && orderRow?.razorpay_order_id && process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
-          try {
-            const auth = Buffer.from(`${process.env.RAZORPAY_KEY_ID}:${process.env.RAZORPAY_KEY_SECRET}`).toString('base64')
-            const rp = await fetch(`https://api.razorpay.com/v1/orders/${orderRow.razorpay_order_id}`, {
-              headers: { Authorization: `Basic ${auth}` },
-            })
-            if (rp.ok) {
-              const rpJson: any = await rp.json()
-              const notes = (rpJson?.notes as any) || {}
-              const ns = (notes?.shipping as any) || notes
-              const n1 = (ns?.name ?? '') as string
-              const f1 = (ns?.first_name ?? ns?.firstName ?? '') as string
-              const l1 = (ns?.last_name ?? ns?.lastName ?? '') as string
-              const combined = (n1 && n1.trim()) || [f1, l1].filter((s: string) => s && s.trim().length > 0).join(' ').trim()
-              if (combined) derivedName = combined
-            }
-          } catch (e) {
-            console.error('fulfillment.fetch_rp_order_failed', (e as any)?.message || e)
-          }
-        }
+        const name = (shipRaw?.name || `${shipRaw?.first_name || shipRaw?.firstName || ''} ${shipRaw?.last_name || shipRaw?.lastName || ''}`).trim()
         const ship = {
-          name: derivedName,
-          address: (shipRaw?.address ?? '') as string,
-          city: (shipRaw?.city ?? '') as string,
-          state: (shipRaw?.state ?? '') as string,
-          pincode: (shipRaw?.pincode ?? '') as string,
-          phone: (shipRaw?.phone ?? '') as string,
-          email: (shipRaw?.email ?? '') as string,
+          name,
+          address: String(shipRaw?.address || ''),
+          city: String(shipRaw?.city || ''),
+          state: String(shipRaw?.state || ''),
+          pincode: String(shipRaw?.pincode || ''),
+          phone: String(shipRaw?.phone || ''),
+          email: String(shipRaw?.email || ''),
         }
-        // Trim whitespace
-        for (const k of Object.keys(ship) as (keyof typeof ship)[]) {
-          const v = ship[k]
-          if (typeof v === 'string') (ship as any)[k] = v.trim()
-        }
-        const parcelMeta = (meta?.parcel as any) || {}
-
         const required = [ship.address, ship.city, ship.state, ship.pincode, ship.phone]
-        if (required.some(v => !v || String(v).trim().length === 0)) {
-          console.error('fulfillment.missing_shipping_in_metadata', { orderId, shipping: ship })
-          throw new Error('missing_shipping')
-        }
-
-        // TODO: when multi-seller is ready, join order_items → seller_id → profiles
-        const pickupName = process.env.DELHIVERY_DEFAULT_PICKUP_NAME || 'sai'
-        const isCOD = false // per instruction: Prepaid only for automation
+        if (required.some(v => !v || String(v).trim().length === 0)) return
         const cfg = getDelhiveryConfig()
-
+        const pickupName = process.env.DELHIVERY_DEFAULT_PICKUP_NAME || 'sai'
+        const parcelMeta = (meta?.parcel as any) || {}
         const createInput = {
           orderId,
-          paymentMode: isCOD ? 'COD' as const : 'Prepaid' as const,
+          paymentMode: 'Prepaid' as const,
           codAmount: undefined,
           sellerPickupLocation: {
             name: pickupName,
@@ -276,15 +223,7 @@ export async function POST(request: NextRequest) {
             pincode: String(process.env.DELHIVERY_DEFAULT_PICKUP_PIN || ''),
             phone: String(process.env.DELHIVERY_DEFAULT_PICKUP_PHONE || '')
           },
-          consignee: {
-            name: String(derivedName || ship.name || ''),
-            address: String(ship.address),
-            city: String(ship.city),
-            state: String(ship.state),
-            pincode: String(ship.pincode),
-            phone: String(ship.phone),
-            email: String(ship.email)
-          },
+          consignee: ship,
           parcel: {
             weightInGrams: Number(parcelMeta?.weight_g || 500),
             lengthCm: parcelMeta?.length_cm ? Number(parcelMeta.length_cm) : 20,
@@ -299,68 +238,42 @@ export async function POST(request: NextRequest) {
           const providerStatus = created?.status
           const providerData = created?.data as any
           const awb = providerData?.packages?.[0]?.waybill as string | undefined
-
-          // Persist shipment record into metadata for tracking and diagnostics
-          try {
-            const nextMeta = {
-              ...meta,
-              seller_id: (typeof sellerId !== 'undefined' ? sellerId : (meta as any)?.seller_id) ?? null,
-              shipping: ship,
-              shipment: {
+          const nextMeta = {
+            ...meta,
+            seller_id: (typeof sellerId !== 'undefined' ? sellerId : (meta as any)?.seller_id) ?? null,
+            shipping: ship,
+            shipment: { provider: 'delhivery', waybill: awb || null, created_at: new Date().toISOString(), provider_status: providerStatus, provider_response: providerData },
+          }
+          await admin.from('orders').update({ metadata: nextMeta as any }).eq('id', orderId)
+          if (awb && String(providerStatus || '').startsWith('2')) {
+            try { await getPackingSlip(cfg, [awb], '4R') } catch {}
+            try {
+              const admin2 = createAdminClient()
+              const ins = await admin2.from('shipments').insert({
+                order_id: orderId,
+                seller_id: sellerId,
                 provider: 'delhivery',
-                waybill: awb || null,
-                created_at: new Date().toISOString(),
-                provider_status: providerStatus,
-                provider_response: providerData,
-              },
-            }
-            await admin.from('orders').update({ metadata: nextMeta as any }).eq('id', orderId)
-          } catch (persistErr) {
-            console.error('fulfillment.persist_awb_failed', persistErr)
-          }
-
-          // If provider did not return AWB or non-2xx, surface an error in logs
-          if (!awb || !(String(providerStatus || '').startsWith('2'))) {
-            console.error('fulfillment.no_awb_or_bad_status', { providerStatus, providerData })
-            throw new Error('Delhivery did not return a waybill. Verify pickup_location, address, and pincode; ensure warehouse is approved.')
-          }
-
-          // Insert into shipments table (best-effort)
-          try {
-            const admin2 = createAdminClient()
-            const ins = await admin2.from('shipments').insert({
-              order_id: orderId,
-              seller_id: sellerId,
-              provider: 'delhivery',
-              awb,
-              status: 'created',
-              payment_mode: 'Prepaid',
-              cod_amount: null,
-              label_url: null,
-              pickup_name: pickupName,
-              consignee: ship as any,
-              parcel: createInput.parcel as any,
-            } as any)
-            if (ins.error) console.error('fulfillment.shipment_insert_failed', ins.error)
-          } catch (e) {
-            console.error('fulfillment.shipment_insert_exception', (e as any)?.message || e)
-          }
-
-          try {
-            await getPackingSlip(cfg, [awb], '4R')
-          } catch (psErr) {
-            console.error('fulfillment.packing_slip_failed', psErr)
+                awb,
+                status: 'created',
+                payment_mode: 'Prepaid',
+                cod_amount: null,
+                label_url: null,
+                pickup_name: pickupName,
+                consignee: ship as any,
+                parcel: createInput.parcel as any,
+              } as any)
+              if (ins.error) console.error('fulfillment.shipment_insert_failed', ins.error)
+            } catch {}
           }
         } catch (e) {
           console.error('fulfillment.create_shipment_failed', (e as any)?.message || e)
         }
+      } catch (e) {
+        console.error('fulfillment.run_failed', (e as any)?.message || e)
       }
-    } catch (e) {
-      console.error('fulfillment.run_failed', (e as any)?.message || e)
-    }
+    })
 
-    // Return verification success to client immediately
-    return NextResponse.json({ success: true, verification: data }, { status: 200 })
+    return quickResponse
   }
 
   const message = (data?.error?.message

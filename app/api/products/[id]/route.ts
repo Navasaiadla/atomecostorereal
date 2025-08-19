@@ -103,7 +103,7 @@ export async function GET(
       : supabase.storage.from('product-images').getPublicUrl(p).data.publicUrl
     const productImages = sorted.map(img => img.image_path).filter(Boolean).map(toPublic)
     console.log('product_images count:', rawImages.length, 'images after sort/filter:', productImages.length)
-    const imagesOut = productImages.length > 0 ? productImages : ['/bamboo-utensils.svg']
+    const imagesOut = productImages.length > 0 ? productImages : ['/products/bamboo-utensils.svg']
 
     // Transform the data to match the frontend expectations
     const transformedProduct = {

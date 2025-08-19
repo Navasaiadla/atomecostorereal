@@ -159,7 +159,7 @@ export default function ProductsPage() {
                       <td className="py-4 px-4">
                         <div className="flex items-center gap-3">
                           <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
-                            <img src={product.image_url || '/bamboo-utensils.svg'} alt={product.name} className="w-full h-full object-cover" onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/bamboo-utensils.svg' }} />
+                            <img src={product.image_url || '/products/bamboo-utensils.svg'} alt={product.name} className="w-full h-full object-cover" onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/products/bamboo-utensils.svg' }} />
                           </div>
                           <div>
                             <p className="font-medium text-gray-900">{product.name}</p>

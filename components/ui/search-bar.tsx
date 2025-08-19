@@ -3,9 +3,10 @@ import { useState, useEffect } from 'react'
 
 interface SearchBarProps {
   small?: boolean
+  variant?: 'default' | 'dark'
 }
 
-export function SearchBar({ small }: SearchBarProps) {
+export function SearchBar({ small, variant = 'default' }: SearchBarProps) {
   const router = useRouter()
   const [query, setQuery] = useState('')
   const [loading, setLoading] = useState(false)
@@ -49,7 +50,14 @@ export function SearchBar({ small }: SearchBarProps) {
           placeholder="Search for eco-friendly products..."
           className={`w-full ${small ? 'pl-3 pr-8 py-2 text-sm' : 'pl-4 pr-12 py-2'} rounded-lg border border-gray-200 focus:outline-none focus:border-blue-700`}
         />
-        <button type="submit" className={`absolute right-2 top-1/2 -translate-y-1/2 text-white ${small ? 'px-3 py-1 text-sm' : 'px-4 py-1'} bg-[#b8860b] rounded hover:bg-[#9c7209] focus:ring-2 focus:ring-[#d4af37]`}>
+        <button
+          type="submit"
+          className={`absolute right-2 top-1/2 -translate-y-1/2 text-white ${small ? 'px-3 py-1 text-sm' : 'px-4 py-1'} rounded ${
+            variant === 'dark'
+              ? 'bg-blue-700 hover:bg-blue-800 focus:ring-2 focus:ring-blue-400'
+              : 'bg-sky-400 hover:bg-sky-500 focus:ring-2 focus:ring-sky-300'
+          }`}
+        >
           {loading ? '...' : 'Search'}
         </button>
       </form>
@@ -63,7 +71,7 @@ export function SearchBar({ small }: SearchBarProps) {
           <ul>
             {results.map((p) => (
               <li key={p.id}>
-                <a href={`/products/${p.id}`} className="block px-3 py-2 hover:bg-gray-50 text-sm text-gray-800">
+                <a href={`/products/${p.id}`} target="_blank" rel="noopener noreferrer" className="block px-3 py-2 hover:bg-gray-50 text-sm text-gray-800">
                   {p.title}
                 </a>
               </li>

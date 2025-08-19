@@ -148,6 +148,7 @@ export function Reviews({ productId, productName }: ReviewsProps) {
   const averageRating = reviews.length > 0 
     ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length 
     : 0
+  const hasReviews = reviews.length > 0
 
   const renderGlobes = (rating: number, interactive = false, onRatingChange?: (rating: number) => void) => {
     return [...Array(5)].map((_, i) => {
@@ -174,19 +175,23 @@ export function Reviews({ productId, productName }: ReviewsProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 md:space-y-6">
       {/* Reviews Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3 flex-wrap">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900">Customer Reviews</h3>
-          <div className="flex items-center gap-2 mt-1">
-            <div className="flex items-center">
-              {renderGlobes(Math.round(averageRating))}
+          <h3 className="text-xs sm:text-sm font-semibold text-gray-900">Customer Reviews</h3>
+          {hasReviews ? (
+            <div className="flex items-center gap-2 mt-1">
+              <div className="flex items-center scale-90 sm:scale-100 origin-left">
+                {renderGlobes(Math.round(averageRating))}
+              </div>
+              <span className="text-[10px] sm:text-xs text-gray-600">
+                {averageRating.toFixed(1)} ({reviews.length} reviews)
+              </span>
             </div>
-            <span className="text-sm text-gray-600">
-              {averageRating.toFixed(1)} ({reviews.length} reviews)
-            </span>
-          </div>
+          ) : (
+            <p className="text-[10px] sm:text-xs text-gray-500 mt-1">No reviews yet</p>
+          )}
         </div>
 
         <div>
@@ -198,7 +203,7 @@ export function Reviews({ productId, productName }: ReviewsProps) {
               }
               setShowReviewForm(true)
             }}
-            className="bg-[#2B5219] hover:bg-[#1a3110]"
+            className="bg-[#2B5219] hover:bg-[#1a3110] text-xs sm:text-sm w-full sm:w-auto h-10 rounded-md px-4"
           >
             {userReview ? 'Edit Review' : 'Write a Review'}
           </Button>
@@ -206,7 +211,7 @@ export function Reviews({ productId, productName }: ReviewsProps) {
       </div>
 
       {showReviewForm && (
-        <div className="bg-gray-50 p-6 rounded-lg border">
+        <div className="bg-gray-50 p-4 sm:p-6 rounded-lg border">
           <h4 className="text-lg font-semibold mb-4">
             {userReview ? 'Edit Your Review' : 'Write a Review'}
           </h4>
@@ -231,8 +236,8 @@ export function Reviews({ productId, productName }: ReviewsProps) {
               />
             </div>
 
-            <div className="flex gap-3">
-              <Button type="submit" disabled={submitting} className="bg-[#2B5219] hover:bg-[#1a3110]">
+            <div className="flex gap-2 sm:gap-3 flex-wrap">
+              <Button type="submit" disabled={submitting} className="bg-[#2B5219] hover:bg-[#1a3110] text-sm">
                 {submitting ? 'Submitting...' : userReview ? 'Update Review' : 'Submit Review'}
               </Button>
               <Button type="button" variant="outline" onClick={() => setShowReviewForm(false)}>
@@ -275,18 +280,18 @@ export function Reviews({ productId, productName }: ReviewsProps) {
                   <div className="flex items-center">
                     {renderGlobes(review.rating)}
                   </div>
-                  <span className="text-sm text-gray-600">{review.rating}/5</span>
+                  <span className="text-xs sm:text-sm text-gray-600">{review.rating}/5</span>
                 </div>
                 <span className="text-xs text-gray-500">{new Date(review.created_at).toLocaleDateString()}</span>
               </div>
-              {review.comment && <p className="text-gray-600 text-sm">{review.comment}</p>}
+              {review.comment && <p className="text-gray-700 text-sm leading-relaxed">{review.comment}</p>}
               <div className="mt-2"><span className="text-xs text-gray-500">by {review.reviewer_name || 'Anonymous'}</span></div>
             </div>
           ))}
         </div>
       ) : (
-        <div className="text-center py-8">
-          <p className="text-gray-500">No reviews yet. Be the first to review this product!</p>
+        <div className="text-center py-6">
+          <p className="text-gray-500 text-sm">No reviews yet. Be the first to review this product!</p>
         </div>
       )}
     </div>

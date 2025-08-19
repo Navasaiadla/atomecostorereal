@@ -21,42 +21,42 @@ const sampleCategories = [
   {
     name: 'Home & Living',
     description: 'Eco-friendly products for your home and living spaces',
-    image_url: '/bamboo-utensils.svg'
+    image_url: '/products/bamboo-utensils.svg'
   },
   {
     name: 'Personal Care',
     description: 'Natural and organic personal care products',
-    image_url: '/bamboo-utensils.svg'
+    image_url: '/products/bamboo-utensils.svg'
   },
   {
     name: 'Kitchen & Dining',
     description: 'Sustainable kitchen and dining products',
-    image_url: '/bamboo-utensils.svg'
+    image_url: '/products/bamboo-utensils.svg'
   },
   {
     name: 'Clothing & Fashion',
     description: 'Organic and sustainable clothing and fashion items',
-    image_url: '/bamboo-utensils.svg'
+    image_url: '/products/bamboo-utensils.svg'
   },
   {
     name: 'Bathroom & Hygiene',
     description: 'Eco-friendly bathroom and hygiene products',
-    image_url: '/bamboo-utensils.svg'
+    image_url: '/products/bamboo-utensils.svg'
   },
   {
     name: 'Office & Stationery',
     description: 'Sustainable office supplies and stationery',
-    image_url: '/bamboo-utensils.svg'
+    image_url: '/products/bamboo-utensils.svg'
   },
   {
     name: 'Garden & Outdoor',
     description: 'Eco-friendly garden and outdoor products',
-    image_url: '/bamboo-utensils.svg'
+    image_url: '/products/bamboo-utensils.svg'
   },
   {
     name: 'Baby & Kids',
     description: 'Safe and sustainable products for babies and children',
-    image_url: '/bamboo-utensils.svg'
+    image_url: '/products/bamboo-utensils.svg'
   }
 ]
 

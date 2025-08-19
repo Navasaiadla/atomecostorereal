@@ -10,9 +10,9 @@ export function Footer() {
           <Image 
             src="/logo2.png"
             alt="Atom Eco Store"
-            width={180}
-            height={60}
-            className="mb-2 md:mb-0"
+            width={150}
+            height={50}
+            className="h-8 w-auto md:h-12 mb-2 md:mb-0"
           />
           <p className="text-gray-300 text-xs md:text-sm max-w-md">
             India's trusted marketplace for sustainable, eco-friendly products.

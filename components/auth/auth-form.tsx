@@ -20,7 +20,7 @@ export default function AuthForm({ initialMode = 'signin' }: AuthFormProps) {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState('')
   const [messageType, setMessageType] = useState<'success' | 'error' | ''>('')
-  const { signInWithPassword, signUpWithPassword, isSupabaseAvailable } = useAuth()
+  const { signInWithPassword, signUpWithPassword, signInWithOAuth, isSupabaseAvailable } = useAuth()
   const [resetSent, setResetSent] = useState(false)
 
   const handlePasswordAuth = async (e: React.FormEvent) => {
@@ -250,7 +250,7 @@ export default function AuthForm({ initialMode = 'signin' }: AuthFormProps) {
         </button>
       </form>
 
-      {/* Demo social buttons */}
+      {/* Social login */}
       <div className="mt-4">
         <div className="relative">
           <div className="absolute inset-0 flex items-center" aria-hidden="true">
@@ -260,21 +260,23 @@ export default function AuthForm({ initialMode = 'signin' }: AuthFormProps) {
             <span className="bg-white px-3 text-xs text-gray-500">or continue with</span>
           </div>
         </div>
-        <div className="mt-3 grid grid-cols-2 gap-3">
-          <button type="button" className="flex items-center justify-center gap-2 w-full border border-gray-300 rounded-lg py-2 hover:bg-gray-50">
-            <span className="inline-flex h-5 w-5 bg-white">
-              <svg viewBox="0 0 24 24" className="h-5 w-5"><path fill="#EA4335" d="M12 10.2v3.9h5.5c-.2 1.3-1.7 3.9-5.5 3.9-3.3 0-6-2.7-6-6s2.7-6 6-6c1.9 0 3.2.8 3.9 1.5l2.7-2.7C16.9 3.3 14.7 2.4 12 2.4 6.9 2.4 2.7 6.6 2.7 11.7S6.9 21 12 21c6.3 0 9.1-4.4 9.1-8.3 0-.6-.1-1-.2-1.5H12z"/></svg>
+        <div className="mt-3 grid grid-cols-1 gap-3">
+          <button
+            type="button"
+            onClick={() => signInWithOAuth('google')}
+            className="flex items-center justify-center gap-3 w-full border border-gray-300 rounded-lg py-2 hover:bg-gray-50"
+          >
+            <span className="inline-flex h-5 w-5">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" className="h-5 w-5">
+                <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303C33.731 31.668 29.312 35 24 35c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.156 7.957 3.043l5.657-5.657C33.94 5.046 29.189 3 24 3 12.955 3 4 11.955 4 23s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.651-.389-3.917z"/>
+                <path fill="#FF3D00" d="M6.306 14.691l6.571 4.818C14.52 16.104 18.86 13 24 13c3.059 0 5.842 1.156 7.957 3.043l5.657-5.657C33.94 5.046 29.189 3 24 3 16.318 3 9.656 7.337 6.306 14.691z"/>
+                <path fill="#4CAF50" d="M24 43c5.243 0 10.047-2.007 13.657-5.271l-6.29-5.309C29.318 33.46 26.774 35 24 35c-5.281 0-9.688-3.366-11.303-8.001l-6.54 5.036C9.43 38.556 16.186 43 24 43z"/>
+                <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-1.048 3.034-3.235 5.5-5.936 7.084l.001-.001 6.29 5.309C33.52 42.119 39 38 39 23c0-1.341-.138-2.651-.389-3.917z"/>
+              </svg>
             </span>
-            <span className="text-sm font-medium text-gray-700">Google</span>
-          </button>
-          <button type="button" className="flex items-center justify-center gap-2 w-full border border-gray-300 rounded-lg py-2 hover:bg-gray-50">
-            <span className="inline-flex h-5 w-5 bg-white">
-              <svg viewBox="0 0 24 24" className="h-5 w-5"><path fill="#1877F2" d="M22.675 0h-21.35C.597 0 0 .597 0 1.326v21.348C0 23.403.597 24 1.326 24H12.82v-9.294H9.692V11.07h3.128V8.414c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.794.143v3.24l-1.918.001c-1.504 0-1.796.716-1.796 1.767v2.318h3.587l-.467 3.636h-3.12V24h6.116C23.403 24 24 23.403 24 22.674V1.326C24 .597 23.403 0 22.675 0z"/></svg>
-            </span>
-            <span className="text-sm font-medium text-gray-700">Facebook</span>
+            <span className="text-sm font-medium text-gray-700">Continue with Google</span>
           </button>
         </div>
-        <p className="mt-2 text-[11px] text-gray-500 text-center">Demo only</p>
       </div>
 
       {message && (
@@ -283,29 +285,7 @@ export default function AuthForm({ initialMode = 'signin' }: AuthFormProps) {
         </div>
       )}
 
-      <div className="mt-8 text-center">
-        {mode === 'signin' ? (
-          <p className="text-sm text-gray-600">
-            Don't have an account?{' '}
-            <button
-              onClick={() => { setMode('signup'); resetForm() }}
-              className="font-medium text-green-600 hover:text-green-500 transition-colors"
-            >
-              Sign up here
-            </button>
-          </p>
-        ) : (
-          <p className="text-sm text-gray-600">
-            Already have an account?{' '}
-            <button
-              onClick={() => { setMode('signin'); resetForm() }}
-              className="font-medium text-green-600 hover:text-green-500 transition-colors"
-            >
-              Login here
-            </button>
-          </p>
-        )}
-      </div>
+      {/* Removed external signup/login links below card as requested */}
     </div>
   )
 } 

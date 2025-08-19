@@ -72,14 +72,7 @@ export default function CartPage() {
             </div>
           ) : (
             <>
-              {/* Breadcrumb */}
-              <nav className="mb-8">
-                <ol className="flex items-center space-x-2 text-sm text-gray-600">
-                  <li><Link href="/" className="hover:text-[#2B5219]">Home</Link></li>
-                  <li>/</li>
-                  <li className="text-gray-900">Shopping Cart</li>
-                </ol>
-              </nav>
+              {/* Breadcrumb removed per request */}
 
               {/* Page Title */}
               <div className="mb-8">
@@ -136,7 +129,7 @@ export default function CartPage() {
                                     alt={item.name}
                                     className="w-full h-full object-cover"
                                     onError={(e) => {
-                                      e.currentTarget.src = '/bamboo-utensils.svg'
+                                      e.currentTarget.src = '/products/bamboo-utensils.svg'
                                     }}
                                   />
                                 </div>

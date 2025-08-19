@@ -47,7 +47,7 @@ export default function PaymentSuccessPage() {
     }
 
     // Auto redirect countdown (fast)
-    const t = setTimeout(() => router.replace('/orders'), 1200)
+    const t = setTimeout(() => router.replace('/orders'), 800)
 
     return () => clearTimeout(t)
   }, [router])
