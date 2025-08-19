@@ -11,8 +11,16 @@ function parseList(value?: string | null): string[] {
 
 export async function POST(request: NextRequest) {
   try {
-    const { user } = await request.json()
-    
+    const body = await request.json()
+    // Accept both shapes:
+    // 1) { user: { id, email, user_metadata: { full_name, avatar_url } } }
+    // 2) { user_id, email, full_name, avatar_url }
+    const user = body?.user || {
+      id: body?.user_id,
+      email: body?.email,
+      user_metadata: { full_name: body?.full_name, avatar_url: body?.avatar_url },
+    }
+
     if (!user?.id || !user?.email) {
       return NextResponse.json(
         { error: 'Invalid user data' },
@@ -35,7 +43,7 @@ export async function POST(request: NextRequest) {
     // Check if profile already exists
     const { data: existingProfile } = await supabase
       .from('profiles')
-      .select('id, email, role')
+      .select('id, email, role, full_name, avatar_url')
       .eq('id', user.id)
       .single()
 
@@ -56,6 +64,26 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ message: 'Profile updated', profile: updated }, { status: 200 })
       }
 
+      // Optionally refresh name/avatar if changed or missing
+      const incomingFullName = user?.user_metadata?.full_name || null
+      const incomingAvatar = user?.user_metadata?.avatar_url || null
+      const needsMetaUpdate = (
+        (!!incomingFullName && incomingFullName !== existingProfile.full_name) ||
+        (!!incomingAvatar && incomingAvatar !== existingProfile.avatar_url)
+      )
+      if (needsMetaUpdate) {
+        const { data: updatedMeta } = await supabase
+          .from('profiles')
+          .update({ full_name: incomingFullName, avatar_url: incomingAvatar })
+          .eq('id', user.id)
+          .select('id, email, role, full_name, avatar_url')
+          .single()
+        return NextResponse.json(
+          { message: 'Profile metadata refreshed', profile: updatedMeta },
+          { status: 200 }
+        )
+      }
+
       return NextResponse.json(
         { message: 'Profile already exists', profile: existingProfile },
         { status: 200 }
@@ -69,6 +97,7 @@ export async function POST(request: NextRequest) {
         id: user.id,
         email: user.email,
         full_name: user.user_metadata?.full_name || null,
+        avatar_url: user.user_metadata?.avatar_url || null,
         role: desiredRole,
       })
       .select()

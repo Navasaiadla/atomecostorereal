@@ -60,11 +60,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
     if (r === 'admin') {
       router.push('/admin/dashboard')
-    } else if (r === 'seller') {
-      router.push('/seller/dashboard')
-    } else {
-      router.push('/')
+      return
     }
+    // For sellers and customers, land on home by default to avoid unexpected redirects
+    router.push('/')
   }
 
   useEffect(() => {
@@ -98,11 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                 await fetch('/api/auth/create-profile', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    user_id: session.user.id,
-                    email: session.user.email,
-                    full_name: session.user.user_metadata?.full_name || '',
-                  }),
+                  body: JSON.stringify({ user: session.user }),
                 })
                 await redirectBasedOnRole(session.user.id)
               } catch (error) {
