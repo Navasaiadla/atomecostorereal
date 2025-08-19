@@ -7,7 +7,7 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 const isConfigured = Boolean(supabaseUrl && supabaseAnonKey)
 
 // Server-side Supabase client (for API routes and Server Components)
-export function createServerSupabaseClient() {
+export async function createServerSupabaseClient() {
   if (!isConfigured) {
     // Safe mock that behaves like a thenable query builder and resolves to empty results
     const thenable = {
@@ -44,7 +44,7 @@ export function createServerSupabaseClient() {
     return mock
   }
 
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
   return createServerClient<Database>(supabaseUrl!, supabaseAnonKey!, {
     cookies: {
       getAll() {

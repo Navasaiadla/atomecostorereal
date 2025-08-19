@@ -6,8 +6,9 @@ export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-export async function GET(request: NextRequest, { params }: { params: { awb: string } }) {
-  const awb = decodeURIComponent(params.awb)
+export async function GET(request: NextRequest, context: { params: Promise<{ awb: string }> }) {
+  const { awb: awbRaw } = await context.params
+  const awb = decodeURIComponent(awbRaw)
   if (!awb || awb.trim().length === 0) {
     return NextResponse.json({ error: 'awb required' }, { status: 400 })
   }

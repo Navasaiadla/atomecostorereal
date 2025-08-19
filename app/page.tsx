@@ -27,7 +27,7 @@ interface Product {
 }
 
 async function getLiveCategories(): Promise<{ id: string; name: string }[]> {
-  const supabase = createServerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
   const { data, error } = await supabase
     .from('categories')
     .select('id, Category, created_at')
@@ -38,7 +38,7 @@ async function getLiveCategories(): Promise<{ id: string; name: string }[]> {
 }
 
 async function getFeaturedProducts(): Promise<Product[]> {
-  const supabase = createServerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
   const { data, error } = await supabase
     .from('products')
     .select(`

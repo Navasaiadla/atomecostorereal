@@ -6,11 +6,12 @@ import { getDelhiveryConfig, cancelShipment } from '@/lib/delhivery'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-export async function POST(req: NextRequest, { params }: { params: { awb: string } }) {
-  const awb = decodeURIComponent(params.awb)
+export async function POST(req: NextRequest, context: { params: Promise<{ awb: string }> }) {
+  const { awb: awbRaw } = await context.params
+  const awb = decodeURIComponent(awbRaw)
   if (!awb) return NextResponse.json({ ok: false, error: 'awb_required' }, { status: 400 })
 
-  const supabase = createServerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
   const { data: auth } = await supabase.auth.getUser()
   const uid = auth?.user?.id || null
   if (!uid) return NextResponse.json({ ok: false, error: 'unauthorized' }, { status: 401 })

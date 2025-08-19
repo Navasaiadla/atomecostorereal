@@ -5,8 +5,9 @@ import { getDelhiveryConfig, delhiveryRequest } from '@/lib/delhivery'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-export async function POST(req: NextRequest, { params }: { params: { awb: string } }) {
-  const awb = decodeURIComponent(params.awb)
+export async function POST(req: NextRequest, context: { params: Promise<{ awb: string }> }) {
+  const { awb: awbRaw } = await context.params
+  const awb = decodeURIComponent(awbRaw)
   try {
     const form = await req.formData()
     const pickup_date = String(form.get('pickup_date') || '')

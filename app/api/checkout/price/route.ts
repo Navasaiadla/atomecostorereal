@@ -8,7 +8,7 @@ export const revalidate = 0
 // Returns computed price for the current user's cart (per-item lines + totals)
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     const { searchParams } = new URL(request.url)
     const singleProductId = searchParams.get('productId')
     const qtyParam = Number(searchParams.get('qty') || '1') || 1

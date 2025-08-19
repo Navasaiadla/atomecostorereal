@@ -29,9 +29,10 @@ const SLOT_OPTIONS: SlotOption[] = [
   { key: 'late_evening', label: 'Late Evening (18:00 - 21:00)' },
 ]
 
-export default async function PickupPage({ params }: { params: { awb: string } }) {
-  const awb = decodeURIComponent(params.awb)
-  const supabase = createServerSupabaseClient()
+export default async function PickupPage({ params }: { params: Promise<{ awb: string }> }) {
+  const { awb: awbRaw } = await params
+  const awb = decodeURIComponent(awbRaw)
+  const supabase = await createServerSupabaseClient()
   const { data: { user } } = await supabase.auth.getUser()
 
   const days = getUpcomingDays()

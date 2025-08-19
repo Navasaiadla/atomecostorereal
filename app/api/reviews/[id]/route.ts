@@ -3,15 +3,15 @@ import { createServerSupabaseClient } from '@/lib/supabase-server'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     
     const { data: review, error } = await supabase
       .from('reviews')
       .select('id, product_id, user_id, rating, comment, created_at')
-      .eq('id', params.id)
+      .eq('id', (await context.params).id)
       .single()
 
     if (error || !review) {
@@ -40,10 +40,10 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
@@ -60,7 +60,7 @@ export async function PUT(
     const { data: existingReview, error: fetchError } = await supabase
       .from('reviews')
       .select('user_id')
-      .eq('id', params.id)
+      .eq('id', (await context.params).id)
       .single()
 
     if (fetchError || !existingReview) {
@@ -74,7 +74,7 @@ export async function PUT(
     const { data: review, error: updateError } = await supabase
       .from('reviews')
       .update({ rating, comment: comment ?? null })
-      .eq('id', params.id)
+      .eq('id', (await context.params).id)
       .select('id, product_id, user_id, rating, comment, created_at')
       .single()
 
@@ -104,10 +104,10 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {
@@ -117,7 +117,7 @@ export async function DELETE(
     const { data: existingReview, error: fetchError } = await supabase
       .from('reviews')
       .select('user_id')
-      .eq('id', params.id)
+      .eq('id', (await context.params).id)
       .single()
 
     if (fetchError || !existingReview) {
@@ -131,7 +131,7 @@ export async function DELETE(
     const { error: deleteError } = await supabase
       .from('reviews')
       .delete()
-      .eq('id', params.id)
+      .eq('id', (await context.params).id)
 
     if (deleteError) {
       console.error('Error deleting review:', deleteError)

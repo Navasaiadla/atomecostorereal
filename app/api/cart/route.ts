@@ -5,7 +5,7 @@ import { cookies } from 'next/headers'
 // Get cart items for the authenticated user
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     
     // Get the current session first
     const { data: { session }, error: sessionError } = await supabase.auth.getSession()
@@ -110,7 +110,7 @@ export async function GET(request: NextRequest) {
 // Add item to cart
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     const body = await request.json()
     const { product_id, quantity = 1 } = body
 
@@ -314,7 +314,7 @@ export async function POST(request: NextRequest) {
 // Update cart item quantity
 export async function PUT(request: NextRequest) {
   try {
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     const body = await request.json()
     const { cart_item_id, quantity } = body
 
@@ -406,7 +406,7 @@ export async function PUT(request: NextRequest) {
 // Remove item from cart
 export async function DELETE(request: NextRequest) {
   try {
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     const { searchParams } = new URL(request.url)
     const cart_item_id = searchParams.get('cart_item_id')
 

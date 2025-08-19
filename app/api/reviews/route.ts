@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const productId = searchParams.get('productId')
     const userId = searchParams.get('userId')
 
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
 
     let query = supabase
       .from('reviews')
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     if (authError || !user) {

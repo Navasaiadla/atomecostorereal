@@ -37,8 +37,8 @@ function getStatusColor(status: string) {
   return "bg-amber-100 text-amber-700"
 }
 
-export default async function OrdersPage({ searchParams }: { searchParams: { [key: string]: string | string[] | undefined } }) {
-  const supabase = createServerSupabaseClient()
+export default async function OrdersPage({ searchParams }: { searchParams: Promise<{ [key: string]: string | string[] | undefined }> }) {
+  const supabase = await createServerSupabaseClient()
   const { data: auth } = await supabase.auth.getUser()
   const uid = auth?.user?.id ?? null
 
@@ -134,9 +134,10 @@ export default async function OrdersPage({ searchParams }: { searchParams: { [ke
     pending: shipments.filter(s => !(s.status || '').toLowerCase().includes('shipped') && !(s.status || '').toLowerCase().includes('delivered')).length,
   }
 
-  const cancelStatus = typeof searchParams?.cancel === 'string' ? searchParams.cancel : undefined
-  const pickupStatus = typeof searchParams?.pickup === 'string' ? searchParams.pickup : undefined
-  const reason = typeof searchParams?.reason === 'string' ? searchParams.reason : undefined
+  const sp = await searchParams
+  const cancelStatus = typeof sp?.cancel === 'string' ? sp.cancel : undefined
+  const pickupStatus = typeof sp?.pickup === 'string' ? sp.pickup : undefined
+  const reason = typeof sp?.reason === 'string' ? sp.reason : undefined
 
   return (
     <div className="space-y-6">

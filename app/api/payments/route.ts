@@ -7,7 +7,7 @@ export const revalidate = 0
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     const body = await request.json().catch(() => ({}))
 
     // Try to get user for attribution

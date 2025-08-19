@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
   let authHeader = request.headers.get('Authorization') || undefined
   try {
     if (!authHeader) {
-      const supabase = createServerSupabaseClient()
+      const supabase = await createServerSupabaseClient()
       const { data: { session } } = await supabase.auth.getSession()
       if (session?.access_token) authHeader = `Bearer ${session.access_token}`
     }

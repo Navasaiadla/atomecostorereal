@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Missing order_id' }, { status: 400 })
     }
 
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     // Support both schemas: amount in minor units or rupees; presence of total_amount in some schemas
     const { data, error } = await supabase
       .from('orders')

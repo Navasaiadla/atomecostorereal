@@ -3,11 +3,11 @@ import { createServerSupabaseClient } from '@/lib/supabase-server'
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   try {
-    const productId = params.id
-    const supabase = createServerSupabaseClient()
+    const { id: productId } = await context.params
+    const supabase = await createServerSupabaseClient()
 
     // Fetch the specific product (active first)
     console.log('PRD request for productId:', productId)
