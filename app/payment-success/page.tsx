@@ -53,7 +53,7 @@ export default function PaymentSuccessPage() {
   }, [router])
 
   return (
-    <div className="bg-gradient-to-br from-green-50 to-emerald-50">
+    <div className="bg-linear-to-br from-green-50 to-emerald-50">
       <div className="flex items-center justify-center p-4 min-h-screen">
         <div className="max-w-2xl w-full">
           {/* Success Content */}
@@ -75,7 +75,7 @@ export default function PaymentSuccessPage() {
 
             {/* Order Details */}
             {orderDetails && (
-              <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 mb-8 border border-green-200">
+              <div className="bg-linear-to-r from-green-50 to-emerald-50 rounded-xl p-6 mb-8 border border-green-200">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Order Details</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div className="flex justify-between">

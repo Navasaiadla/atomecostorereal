@@ -203,7 +203,7 @@ export default async function HomePage() {
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4 max-w-6xl mx-auto mb-6">
                 {featuredToShow.map((product) => (
                   <Link key={product.id} href={`/products/${product.id}`} className="group block">
-                    <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden border border-gray-100 cursor-pointer">
+                    <div className="bg-white rounded-lg shadow-xs hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden border border-gray-100 cursor-pointer">
                       <div className="relative h-28 md:h-36">
                         <Image
                           src={product.images[0] || '/products/bamboo-utensils.svg'}
@@ -212,11 +212,11 @@ export default async function HomePage() {
                           height={220}
                           className="w-full h-full object-cover bg-gray-50 group-hover:scale-105 transition-transform duration-300"
                         />
-                        <span className="absolute top-2 left-2 bg-[#2B5219] text-white text-[9px] md:text-xs px-1.5 py-0.5 rounded-full font-semibold shadow-sm">
+                        <span className="absolute top-2 left-2 bg-[#2B5219] text-white text-[9px] md:text-xs px-1.5 py-0.5 rounded-full font-semibold shadow-xs">
                           Eco-Friendly
                         </span>
                         {product.sale_price && (
-                          <span className="absolute top-2 right-2 bg-red-500 text-white text-[9px] md:text-xs px-1.5 py-0.5 rounded-full font-semibold shadow-sm">
+                          <span className="absolute top-2 right-2 bg-red-500 text-white text-[9px] md:text-xs px-1.5 py-0.5 rounded-full font-semibold shadow-xs">
                             Sale
                           </span>
                         )}

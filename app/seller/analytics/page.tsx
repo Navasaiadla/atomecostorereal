@@ -8,7 +8,7 @@ export default function SellerAnalyticsPage() {
         <p className="text-gray-600 mt-2">Track your sales performance and insights</p>
       </div>
 
-      <div className="bg-white rounded-lg shadow p-8 text-center">
+      <div className="bg-white rounded-lg shadow-sm p-8 text-center">
         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <span className="text-2xl">📈</span>
         </div>

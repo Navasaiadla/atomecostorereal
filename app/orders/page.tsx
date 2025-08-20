@@ -72,7 +72,7 @@ export default function OrdersPage() {
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">My Orders</h1>
 
         {loading ? (
-          <div className="bg-white p-6 rounded-lg shadow-sm space-y-3">
+          <div className="bg-white p-6 rounded-lg shadow-xs space-y-3">
             <div className="h-5 bg-gray-100 rounded w-40" />
             <div className="h-12 bg-gray-100 rounded" />
             <div className="h-12 bg-gray-100 rounded" />
@@ -88,14 +88,14 @@ export default function OrdersPage() {
             </div>
           </div>
         ) : orders.length === 0 ? (
-          <div className="bg-white p-8 rounded-lg shadow-sm text-center">
+          <div className="bg-white p-8 rounded-lg shadow-xs text-center">
             <p className="text-gray-600">You have no orders yet.</p>
             <Link href="/products" className="inline-block mt-4">
               <Button>Shop Products</Button>
             </Link>
           </div>
         ) : (
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-white rounded-lg shadow-xs overflow-hidden">
             <div className="grid grid-cols-12 gap-4 px-4 py-3 border-b text-sm font-semibold text-gray-700 bg-gray-50">
               <div className="col-span-4">Order</div>
               <div className="col-span-2">Amount</div>

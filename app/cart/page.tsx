@@ -49,7 +49,7 @@ export default function CartPage() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-green-50 via-white to-emerald-50">
+    <div className="bg-linear-to-br from-green-50 via-white to-emerald-50">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           {isLoading ? (
@@ -122,7 +122,7 @@ export default function CartPage() {
                           <div key={item.id} className="p-6">
                             <div className="flex gap-4">
                               {/* Product Image */}
-                              <div className="flex-shrink-0">
+                              <div className="shrink-0">
                                 <div className="w-24 h-24 rounded-lg overflow-hidden bg-gray-100">
                                   <img
                                     src={item.image}

@@ -40,7 +40,7 @@ export default function PaymentFailedPage() {
   }, [router])
 
   return (
-    <div className="bg-gradient-to-br from-red-50 to-pink-50">
+    <div className="bg-linear-to-br from-red-50 to-pink-50">
       <div className="flex items-center justify-center p-4 min-h-screen">
         <div className="max-w-2xl w-full">
           {/* Failure Content */}
@@ -62,7 +62,7 @@ export default function PaymentFailedPage() {
 
             {/* Error Details */}
             {errorDetails && (
-              <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-6 mb-8 border border-red-200">
+              <div className="bg-linear-to-r from-red-50 to-pink-50 rounded-xl p-6 mb-8 border border-red-200">
                 <h2 className="text-xl font-semibold text-gray-900 mb-4">Error Details</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                   <div className="flex justify-between">

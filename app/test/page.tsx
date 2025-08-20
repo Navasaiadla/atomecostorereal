@@ -38,11 +38,11 @@ export default function TestPage() {
                 <input 
                   type="text" 
                   placeholder="Test input" 
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:border-green-600"
                 />
                 <textarea 
                   placeholder="Test textarea" 
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-green-600"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:border-green-600"
                   rows={3}
                 />
               </div>

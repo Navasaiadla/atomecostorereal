@@ -150,7 +150,7 @@ export default function ProductDetailPage() {
 
   if (loading) {
     return (
-      <div className="bg-gradient-to-br from-green-50 via-white to-emerald-50">
+      <div className="bg-linear-to-br from-green-50 via-white to-emerald-50">
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-6xl mx-auto">
             <div className="animate-pulse">
@@ -174,7 +174,7 @@ export default function ProductDetailPage() {
 
   if (error || !product) {
     return (
-      <div className="bg-gradient-to-br from-green-50 via-white to-emerald-50">
+      <div className="bg-linear-to-br from-green-50 via-white to-emerald-50">
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-6xl mx-auto">
             <div className="text-center">
@@ -191,7 +191,7 @@ export default function ProductDetailPage() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-green-50 via-white to-emerald-50">
+    <div className="bg-linear-to-br from-green-50 via-white to-emerald-50">
       <div className="container mx-auto px-2 sm:px-4 pt-4 pb-4 md:pb-8">
         <div className="max-w-6xl mx-auto">
           
@@ -224,7 +224,7 @@ export default function ProductDetailPage() {
                           onClick={() => setActiveIndex(idx)}
                           className={`relative h-16 w-16 rounded-lg overflow-hidden border ${
                             activeIndex === idx ? 'border-[#2B5219]' : 'border-gray-200'
-                          } flex-shrink-0`}
+                          } shrink-0`}
                           aria-label={`View image ${idx + 1}`}
                         >
                           <img
@@ -370,7 +370,7 @@ export default function ProductDetailPage() {
             {relatedLoading ? (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="bg-white rounded-xl shadow p-4 animate-pulse h-56" />
+                  <div key={i} className="bg-white rounded-xl shadow-sm p-4 animate-pulse h-56" />
                 ))}
               </div>
             ) : relatedError ? (
@@ -380,7 +380,7 @@ export default function ProductDetailPage() {
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {related.slice(0, 8).map((rp) => (
-                  <Link key={rp.id} href={`/products/${rp.id}`} className="bg-white rounded-xl shadow hover:shadow-md transition-shadow overflow-hidden">
+                  <Link key={rp.id} href={`/products/${rp.id}`} className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden">
                     <div className="relative h-36 bg-gray-100">
                       <img
                         src={rp.images?.[0] || '/products/bamboo-utensils.svg'}
@@ -396,7 +396,7 @@ export default function ProductDetailPage() {
                       </div>
                     </div>
                     <div className="p-3">
-                      <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 min-h-[2.25rem]">{rp.title}</h3>
+                      <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 min-h-9">{rp.title}</h3>
                       <div className="mt-2 flex items-center justify-between">
                         <span className="text-base font-bold text-[#2B5219]">₹{rp.price}</span>
                       </div>
@@ -414,7 +414,7 @@ export default function ProductDetailPage() {
         </div>
       </div>
       {/* Mobile sticky CTA bar */}
-      <div className="fixed inset-x-0 bottom-0 z-40 bg-white/95 backdrop-blur border-t border-gray-200 p-3 md:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 bg-white/95 backdrop-blur-sm border-t border-gray-200 p-3 md:hidden">
         <div className="container mx-auto px-2">
           <div className="flex gap-3">
             <Button 

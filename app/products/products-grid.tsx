@@ -138,7 +138,7 @@ export function ProductsGrid() {
         <div className="mb-8 md:mb-12">
           <div className="flex flex-nowrap overflow-x-auto justify-start md:justify-center gap-2 md:gap-3 pb-2 md:pb-0">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="w-24 h-10 bg-gray-200 rounded-full animate-pulse flex-shrink-0"></div>
+              <div key={i} className="w-24 h-10 bg-gray-200 rounded-full animate-pulse shrink-0"></div>
             ))}
           </div>
         </div>
@@ -223,7 +223,7 @@ export function ProductsGrid() {
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
-              className={`group flex items-center gap-1 md:gap-2 px-3 md:px-6 py-2 md:py-3 rounded-full border transition-all duration-300 transform hover:scale-105 whitespace-nowrap flex-shrink-0 ${
+              className={`group flex items-center gap-1 md:gap-2 px-3 md:px-6 py-2 md:py-3 rounded-full border transition-all duration-300 transform hover:scale-105 whitespace-nowrap shrink-0 ${
                 selectedCategory === category.id
                   ? 'border-[#2B5219] bg-[#2B5219] text-white'
                   : 'border-gray-200 hover:border-[#2B5219] hover:bg-[#2B5219] hover:text-white'

@@ -17,7 +17,7 @@ const defaultCategories = [
 
 export default function ProductsPage() {
   return (
-    <div className="bg-gradient-to-br from-green-50 via-white to-emerald-50">
+    <div className="bg-linear-to-br from-green-50 via-white to-emerald-50">
       <div className="container mx-auto px-2 sm:px-4 pt-6 pb-10">
         {/* Hero Section */}
         <div className="text-center mb-12">

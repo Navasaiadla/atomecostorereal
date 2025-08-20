@@ -33,7 +33,7 @@ export default function SignOutPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="bg-white border rounded-xl shadow-sm p-6 w-full max-w-sm text-center">
+      <div className="bg-white border rounded-xl shadow-xs p-6 w-full max-w-sm text-center">
         <div className="mx-auto mb-4 w-12 h-12 rounded-full flex items-center justify-center bg-gray-100">
           {status === 'working' ? (
             <div className="w-5 h-5 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />

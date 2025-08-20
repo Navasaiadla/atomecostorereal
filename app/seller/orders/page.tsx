@@ -191,7 +191,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
           ) : (
             <div className="space-y-4">
               {shipments.map((s) => (
-                <div key={s.id} className={`relative border rounded-xl p-4 bg-white hover:shadow-sm transition ${String(s.status).toLowerCase().includes('cancel') ? 'opacity-70' : ''}`}>
+                <div key={s.id} className={`relative border rounded-xl p-4 bg-white hover:shadow-xs transition ${String(s.status).toLowerCase().includes('cancel') ? 'opacity-70' : ''}`}>
                   {String(s.status).toLowerCase().includes('cancel') && (
                     <div className="absolute top-2 right-2 text-xs px-2 py-0.5 rounded bg-red-100 text-red-700 border border-red-200">Cancelled</div>
                   )}

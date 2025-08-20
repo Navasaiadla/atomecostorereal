@@ -40,7 +40,7 @@ export default function AuthCallbackPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="bg-white rounded-xl shadow p-6 w-full max-w-md">
+      <div className="bg-white rounded-xl shadow-sm p-6 w-full max-w-md">
         {stage === 'reset' && (
           <form onSubmit={handleReset} className="space-y-4">
             <h1 className="text-xl font-bold">Set a new password</h1>

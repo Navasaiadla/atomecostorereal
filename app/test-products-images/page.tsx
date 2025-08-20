@@ -48,7 +48,7 @@ export default function TestProductsImagesPage() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-green-50 via-white to-emerald-50">
+    <div className="bg-linear-to-br from-green-50 via-white to-emerald-50">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold text-gray-900 mb-6">Test Products with Images</h1>

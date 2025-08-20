@@ -62,7 +62,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         )}
 
         {/* Top Navigation Bar (single header only) */}
-        <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 flex-shrink-0">
+        <header className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <button
@@ -101,7 +101,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         <div className="flex flex-1 min-h-0">
           {/* Sidebar */}
           <aside className={`
-            fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 flex-shrink-0
+            fixed inset-y-0 left-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0 shrink-0
             ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
           `}>
             <div className="flex items-center justify-between p-4 border-b border-gray-200 lg:hidden">

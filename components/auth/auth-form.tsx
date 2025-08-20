@@ -127,7 +127,7 @@ export default function AuthForm({ initialMode = 'signin' }: AuthFormProps) {
           onClick={() => { setMode('signin'); resetForm() }}
           className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
             mode === 'signin' 
-              ? 'bg-white text-gray-900 shadow-sm' 
+              ? 'bg-white text-gray-900 shadow-xs' 
               : 'text-gray-600 hover:text-gray-900'
           }`}
         >
@@ -137,7 +137,7 @@ export default function AuthForm({ initialMode = 'signin' }: AuthFormProps) {
           onClick={() => { setMode('signup'); resetForm() }}
           className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
             mode === 'signup' 
-              ? 'bg-white text-gray-900 shadow-sm' 
+              ? 'bg-white text-gray-900 shadow-xs' 
               : 'text-gray-600 hover:text-gray-900'
           }`}
         >
@@ -159,7 +159,7 @@ export default function AuthForm({ initialMode = 'signin' }: AuthFormProps) {
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 placeholder="John"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 disabled={loading}
                 required={mode === 'signup'}
               />
@@ -174,7 +174,7 @@ export default function AuthForm({ initialMode = 'signin' }: AuthFormProps) {
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 placeholder="Doe"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 disabled={loading}
                 required={mode === 'signup'}
               />
@@ -192,7 +192,7 @@ export default function AuthForm({ initialMode = 'signin' }: AuthFormProps) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="your@email.com"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:border-transparent"
             disabled={loading}
             required
           />
@@ -209,7 +209,7 @@ export default function AuthForm({ initialMode = 'signin' }: AuthFormProps) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+              className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:border-transparent"
               disabled={loading}
               required
               minLength={6}
@@ -237,7 +237,7 @@ export default function AuthForm({ initialMode = 'signin' }: AuthFormProps) {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 focus:outline-hidden focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {loading ? (
             <div className="flex items-center justify-center">

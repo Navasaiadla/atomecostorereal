@@ -158,7 +158,7 @@ export function Reviews({ productId, productName }: ReviewsProps) {
           key={i}
           type={interactive ? 'button' : undefined}
           onClick={interactive && onRatingChange ? () => onRatingChange(i + 1) : undefined}
-          className={`focus:outline-none ${interactive ? 'hover:scale-110 transition-transform' : ''}`}
+          className={`focus:outline-hidden ${interactive ? 'hover:scale-110 transition-transform' : ''}`}
           aria-label={`Rate ${i + 1} out of 5`}
         >
           <Image

@@ -2,7 +2,7 @@ import AuthForm from '@/components/auth/auth-form'
 
 export default function RegisterPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 via-green-50 to-purple-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-linear-to-br from-blue-100 via-green-50 to-purple-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-sm w-full space-y-6">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900">Create Account</h1>

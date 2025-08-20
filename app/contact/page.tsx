@@ -21,7 +21,7 @@ export default function ContactPage() {
                     type="text"
                     id="name"
                     name="name"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#2B5219]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:border-[#2B5219]"
                     placeholder="Your full name"
                   />
                 </div>
@@ -34,7 +34,7 @@ export default function ContactPage() {
                     type="email"
                     id="email"
                     name="email"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#2B5219]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:border-[#2B5219]"
                     placeholder="your.email@example.com"
                   />
                 </div>
@@ -47,7 +47,7 @@ export default function ContactPage() {
                     type="text"
                     id="subject"
                     name="subject"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#2B5219]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:border-[#2B5219]"
                     placeholder="What's this about?"
                   />
                 </div>
@@ -60,7 +60,7 @@ export default function ContactPage() {
                     id="message"
                     name="message"
                     rows={5}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#2B5219]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:border-[#2B5219]"
                     placeholder="Tell us more about your inquiry..."
                   ></textarea>
                 </div>
@@ -78,7 +78,7 @@ export default function ContactPage() {
                  
                  <div className="space-y-6">
                    <div className="flex items-start gap-4">
-                     <div className="w-10 h-10 bg-[#2B5219] rounded-full flex items-center justify-center flex-shrink-0">
+                     <div className="w-10 h-10 bg-[#2B5219] rounded-full flex items-center justify-center shrink-0">
                        <span className="text-white">📧</span>
                      </div>
                      <div>
@@ -88,7 +88,7 @@ export default function ContactPage() {
                    </div>
                    
                    <div className="flex items-start gap-4">
-                     <div className="w-10 h-10 bg-[#2B5219] rounded-full flex items-center justify-center flex-shrink-0">
+                     <div className="w-10 h-10 bg-[#2B5219] rounded-full flex items-center justify-center shrink-0">
                        <span className="text-white">📞</span>
                      </div>
                      <div>

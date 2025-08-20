@@ -157,7 +157,7 @@ export default function SellerDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="lg:col-span-2 bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden">
           <div className="p-5 border-b">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900">Recent Orders</h2>
@@ -188,7 +188,7 @@ export default function SellerDashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden">
           <div className="p-5 border-b">
             <h2 className="text-lg font-semibold text-gray-900">Quick Actions</h2>
           </div>
@@ -218,7 +218,7 @@ export default function SellerDashboard() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden">
           <div className="p-5 border-b">
             <h2 className="text-lg font-semibold text-gray-900">Inventory Breakdown</h2>
             <p className="text-sm text-gray-500 mt-1">Active vs Low stock vs Inactive products</p>
@@ -238,7 +238,7 @@ export default function SellerDashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden">
           <div className="p-5 border-b">
             <h2 className="text-lg font-semibold text-gray-900">Store Overview</h2>
           </div>
@@ -281,7 +281,7 @@ function StatCard({
   accent: string
 }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 flex items-center gap-4">
+    <div className="bg-white rounded-xl shadow-xs border border-gray-100 p-5 flex items-center gap-4">
       <div className={`p-3 rounded-lg ${accent}`}>{icon}</div>
       <div>
         <p className="text-xs uppercase tracking-wide text-gray-500">{title}</p>

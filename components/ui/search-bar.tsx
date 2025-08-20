@@ -48,7 +48,7 @@ export function SearchBar({ small, variant = 'default' }: SearchBarProps) {
           onChange={(e) => setQuery(e.target.value)}
           type="text"
           placeholder="Search for eco-friendly products..."
-          className={`w-full ${small ? 'pl-3 pr-8 py-2 text-sm' : 'pl-4 pr-12 py-2'} rounded-lg border border-gray-200 focus:outline-none focus:border-blue-700`}
+          className={`w-full ${small ? 'pl-3 pr-8 py-2 text-sm' : 'pl-4 pr-12 py-2'} rounded-lg border border-gray-200 focus:outline-hidden focus:border-blue-700`}
         />
         <button
           type="submit"

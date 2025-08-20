@@ -158,7 +158,7 @@ export default function ProductsPage() {
                     <tr key={product.id} className="border-b hover:bg-gray-50">
                       <td className="py-4 px-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
+                          <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-100 shrink-0">
                             <img src={product.image_url || '/products/bamboo-utensils.svg'} alt={product.name} className="w-full h-full object-cover" onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/products/bamboo-utensils.svg' }} />
                           </div>
                           <div>

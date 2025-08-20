@@ -156,13 +156,13 @@ export default function DebugRolePage() {
           <div className="mt-8 flex space-x-4">
             <button
               onClick={fetchProfile}
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-hidden focus:ring-2 focus:ring-green-500"
             >
               Refresh Profile
             </button>
             <button
               onClick={() => window.location.reload()}
-              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 focus:outline-hidden focus:ring-2 focus:ring-gray-500"
             >
               Reload Page
             </button>

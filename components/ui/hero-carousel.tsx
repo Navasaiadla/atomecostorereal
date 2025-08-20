@@ -70,7 +70,7 @@ export function HeroCarousel({ slides, intervalMs = 4000, className, priority = 
       ))}
 
       {/* Overlay gradient for readability */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/20 to-black/10 pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-br from-black/40 via-black/20 to-black/10 pointer-events-none" />
 
       {/* Controls */}
       {safeSlides.length > 1 && (
@@ -78,7 +78,7 @@ export function HeroCarousel({ slides, intervalMs = 4000, className, priority = 
           <button
             type="button"
             onClick={prev}
-            className="absolute left-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-black/30 hover:bg-black/40 text-white flex items-center justify-center backdrop-blur-sm"
+            className="absolute left-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-black/30 hover:bg-black/40 text-white flex items-center justify-center backdrop-blur-xs"
             aria-label="Previous slide"
           >
             ‹
@@ -86,7 +86,7 @@ export function HeroCarousel({ slides, intervalMs = 4000, className, priority = 
           <button
             type="button"
             onClick={next}
-            className="absolute right-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-black/30 hover:bg-black/40 text-white flex items-center justify-center backdrop-blur-sm"
+            className="absolute right-3 top-1/2 -translate-y-1/2 z-20 h-9 w-9 rounded-full bg-black/30 hover:bg-black/40 text-white flex items-center justify-center backdrop-blur-xs"
             aria-label="Next slide"
           >
             ›

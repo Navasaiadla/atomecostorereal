@@ -37,7 +37,7 @@ export function Header() {
         {/* Desktop Header */}
         <div className="hidden lg:flex items-center justify-between gap-4">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0 mr-8">
+          <Link href="/" className="flex items-center gap-2 shrink-0 mr-8">
             <Image 
               src="/logo2.png" 
               alt="Atom Eco Store" 
@@ -56,10 +56,10 @@ export function Header() {
           <div className="flex items-center gap-4">
             {/* Cart - First */}
             <Link href="/cart" className="relative group">
-              <div className="w-12 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-800 transition-transform duration-300 hover:scale-105 hover:text-[#2B5219] shadow-sm">
+              <div className="w-12 h-12 bg-white border border-gray-200 rounded-full flex items-center justify-center text-gray-800 transition-transform duration-300 hover:scale-105 hover:text-[#2B5219] shadow-xs">
                 {/* Unified cart/bag icon */}
                 <img src="/cart-removebg-preview.png" alt="Cart" className="w-7 h-7" />
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold shadow">{totalItems}</span>
+                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold shadow-sm">{totalItems}</span>
               </div>
               <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
                 Cart ({totalItems} items)
@@ -83,7 +83,7 @@ export function Header() {
           {/* Top Row - Logo, Search Icon, Cart, Menu */}
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2 flex-shrink-0">
+            <Link href="/" className="flex items-center gap-2 shrink-0">
               <Image 
                 src="/logo2.png" 
                 alt="Atom Eco Store" 
@@ -107,7 +107,7 @@ export function Header() {
 
               {/* Cart - Moved to the end */}
               <Link href="/cart" className="relative p-2">
-                <div className="w-9 h-9 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-sm">
+                <div className="w-9 h-9 bg-white border border-gray-200 rounded-full flex items-center justify-center shadow-xs">
                   <img src="/cart-removebg-preview.png" alt="Cart" className="w-5 h-5" />
                 </div>
                 <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">{totalItems}</span>

@@ -51,7 +51,7 @@ export default function BlogPage() {
                 key={post.id}
                 className="group"
               >
-                <article className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-200">
+                <article className="bg-white rounded-2xl overflow-hidden shadow-xs hover:shadow-lg transition-shadow duration-200">
                   <div className="relative h-48">
                     <Image
                       src={post.image}

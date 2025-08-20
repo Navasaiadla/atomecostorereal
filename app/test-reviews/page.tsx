@@ -88,7 +88,7 @@ export default function TestReviewsPage() {
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold text-gray-900 mb-8">Reviews System Test</h1>
           
-          <div className="bg-white rounded-lg shadow p-6 mb-8">
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
             <h2 className="text-xl font-semibold mb-4">Test Information</h2>
             <div className="space-y-2">
               <p><strong>Test Product ID:</strong> {testProductId}</p>
@@ -97,7 +97,7 @@ export default function TestReviewsPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6 mb-8">
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
             <h2 className="text-xl font-semibold mb-4">Test Actions</h2>
             <div className="space-y-4">
               <Button
@@ -117,7 +117,7 @@ export default function TestReviewsPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-lg shadow-sm p-6">
             <h2 className="text-xl font-semibold mb-4">Reviews List</h2>
             
             {loading ? (

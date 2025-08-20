@@ -71,7 +71,7 @@ export default function ProfilePage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           {/* Header */}
-          <div className="bg-gradient-to-r from-green-600 to-green-700 px-6 py-8">
+          <div className="bg-linear-to-r from-green-600 to-green-700 px-6 py-8">
             <div className="flex items-center">
               <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mr-4">
                 <span className="text-2xl font-bold text-green-600">
@@ -138,7 +138,7 @@ export default function ProfilePage() {
                 <div className="space-y-3">
                   <button
                     onClick={() => router.push('/orders')}
-                    className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                    className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-xs text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
                     View My Orders
                   </button>
@@ -146,7 +146,7 @@ export default function ProfilePage() {
                   {profile?.role === 'admin' && (
                     <button
                       onClick={() => router.push('/admin/dashboard')}
-                      className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                      className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-xs text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
                     >
                       Admin Dashboard
                     </button>
@@ -155,7 +155,7 @@ export default function ProfilePage() {
                   {profile?.role === 'seller' && (
                     <button
                       onClick={() => router.push('/seller/dashboard')}
-                      className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-xs text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
                       Seller Dashboard
                     </button>
@@ -163,7 +163,7 @@ export default function ProfilePage() {
                   
                   <button
                     onClick={() => router.push('/')}
-                    className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+                    className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-xs text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
                   >
                     Back to Home
                   </button>

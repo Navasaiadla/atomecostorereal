@@ -53,7 +53,7 @@ export default function AdminSellerApprovePage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="bg-white p-6 rounded-lg shadow-xs border border-gray-200">
           <div className="flex items-center">
             <div className="p-2 bg-yellow-100 rounded-lg">
               <Clock className="w-6 h-6 text-yellow-600" />
@@ -65,7 +65,7 @@ export default function AdminSellerApprovePage() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="bg-white p-6 rounded-lg shadow-xs border border-gray-200">
           <div className="flex items-center">
             <div className="p-2 bg-green-100 rounded-lg">
               <CheckCircle className="w-6 h-6 text-green-600" />
@@ -77,7 +77,7 @@ export default function AdminSellerApprovePage() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="bg-white p-6 rounded-lg shadow-xs border border-gray-200">
           <div className="flex items-center">
             <div className="p-2 bg-red-100 rounded-lg">
               <XCircle className="w-6 h-6 text-red-600" />
@@ -89,7 +89,7 @@ export default function AdminSellerApprovePage() {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+        <div className="bg-white p-6 rounded-lg shadow-xs border border-gray-200">
           <div className="flex items-center">
             <div className="p-2 bg-blue-100 rounded-lg">
               <Store className="w-6 h-6 text-blue-600" />
@@ -107,7 +107,7 @@ export default function AdminSellerApprovePage() {
         <h2 className="text-xl font-semibold text-gray-900">Pending Applications</h2>
         
         {pendingSellers.map((seller) => (
-          <div key={seller.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <div key={seller.id} className="bg-white rounded-lg shadow-xs border border-gray-200 overflow-hidden">
             <div className="p-6">
               {/* Header */}
               <div className="flex items-center justify-between mb-4">
@@ -210,7 +210,7 @@ export default function AdminSellerApprovePage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+      <div className="bg-white rounded-lg shadow-xs border border-gray-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <button className="flex items-center space-x-3 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">

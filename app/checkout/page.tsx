@@ -134,7 +134,7 @@ export default function CheckoutPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
             {/* Checkout Form */}
-            <div className="bg-white rounded-xl p-6 md:p-8 shadow-sm">
+            <div className="bg-white rounded-xl p-6 md:p-8 shadow-xs">
               <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">Shipping Information</h2>
               <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
                 {/* Personal Information */}
@@ -150,7 +150,7 @@ export default function CheckoutPage() {
                       required
                       value={formData.firstName}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                      className={`w-full px-4 py-2 border rounded-lg focus:outline-hidden focus:border-[#2B5219] ${
                         formErrors.firstName ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -169,7 +169,7 @@ export default function CheckoutPage() {
                       required
                       value={formData.lastName}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                      className={`w-full px-4 py-2 border rounded-lg focus:outline-hidden focus:border-[#2B5219] ${
                         formErrors.lastName ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -191,7 +191,7 @@ export default function CheckoutPage() {
                       required
                       value={formData.email}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                      className={`w-full px-4 py-2 border rounded-lg focus:outline-hidden focus:border-[#2B5219] ${
                         formErrors.email ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -210,7 +210,7 @@ export default function CheckoutPage() {
                       required
                       value={formData.phone}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                      className={`w-full px-4 py-2 border rounded-lg focus:outline-hidden focus:border-[#2B5219] ${
                         formErrors.phone ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -232,7 +232,7 @@ export default function CheckoutPage() {
                     required
                     value={formData.address}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                    className={`w-full px-4 py-2 border rounded-lg focus:outline-hidden focus:border-[#2B5219] ${
                       formErrors.address ? 'border-red-500' : 'border-gray-300'
                     }`}
                     placeholder="Enter your complete address"
@@ -254,7 +254,7 @@ export default function CheckoutPage() {
                       required
                       value={formData.city}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                      className={`w-full px-4 py-2 border rounded-lg focus:outline-hidden focus:border-[#2B5219] ${
                         formErrors.city ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -273,7 +273,7 @@ export default function CheckoutPage() {
                       required
                       value={formData.state}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                      className={`w-full px-4 py-2 border rounded-lg focus:outline-hidden focus:border-[#2B5219] ${
                         formErrors.state ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -292,7 +292,7 @@ export default function CheckoutPage() {
                       required
                       value={formData.pincode}
                       onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-[#2B5219] ${
+                      className={`w-full px-4 py-2 border rounded-lg focus:outline-hidden focus:border-[#2B5219] ${
                         formErrors.pincode ? 'border-red-500' : 'border-gray-300'
                       }`}
                     />
@@ -312,7 +312,7 @@ export default function CheckoutPage() {
                     name="paymentMethod"
                     value={formData.paymentMethod}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#2B5219]"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:border-[#2B5219]"
                   >
                     <option value="razorpay">Online Payment (Razorpay)</option>
                     <option value="cod">Cash on Delivery</option>
@@ -356,7 +356,7 @@ export default function CheckoutPage() {
             </div>
 
             {/* Order Summary */}
-            <div className="bg-white rounded-xl p-6 md:p-8 shadow-sm h-fit">
+            <div className="bg-white rounded-xl p-6 md:p-8 shadow-xs h-fit">
               <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">Order Summary</h2>
               
               {/* Items from cart */}
