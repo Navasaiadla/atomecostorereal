@@ -380,7 +380,7 @@ export default function ProductDetailPage() {
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 {related.slice(0, 8).map((rp) => (
-                  <Link key={rp.id} href={`/products/${rp.id}`} target="_blank" rel="noopener noreferrer" className="bg-white rounded-xl shadow hover:shadow-md transition-shadow overflow-hidden">
+                  <Link key={rp.id} href={`/products/${rp.id}`} className="bg-white rounded-xl shadow hover:shadow-md transition-shadow overflow-hidden">
                     <div className="relative h-36 bg-gray-100">
                       <img
                         src={rp.images?.[0] || '/products/bamboo-utensils.svg'}

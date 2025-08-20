@@ -1,6 +1,7 @@
 import Link from "next/link"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowLeft, Package, Clock, CheckCircle, Truck, XCircle, FileDown, Printer } from "lucide-react"
+import { CancelShipmentButton } from "@/components/seller/cancel-shipment-button"
 import { createServerSupabaseClient } from "@/lib/supabase-server"
 import { Flash } from "@/components/ui/flash"
 
@@ -138,6 +139,9 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
   const cancelStatus = typeof sp?.cancel === 'string' ? sp.cancel : undefined
   const pickupStatus = typeof sp?.pickup === 'string' ? sp.pickup : undefined
   const reason = typeof sp?.reason === 'string' ? sp.reason : undefined
+  const walletLow = reason === 'wallet_low'
+  const walletBalance = typeof sp?.wallet_balance === 'string' ? sp.wallet_balance : undefined
+  const walletMin = typeof sp?.wallet_min === 'string' ? sp.wallet_min : undefined
 
   return (
     <div className="space-y-6">
@@ -156,9 +160,13 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
               ? `Shipment cancellation failed${reason ? `: ${reason}` : ''}.`
               : pickupStatus === 'scheduled'
               ? 'Pickup scheduled successfully.'
+              : pickupStatus === 'failed' && walletLow
+              ? `Pickup failed: Low wallet balance (₹${walletBalance ?? '—'}). Minimum required is ₹${walletMin ?? '—'}. Please top up your Delhivery wallet and try again.`
+              : pickupStatus === 'failed'
+              ? `Pickup failed${reason ? `: ${decodeURIComponent(reason)}` : ''}.`
               : ''
           }
-          variant={cancelStatus === 'failed' ? 'error' : cancelStatus === 'success' ? 'success' : 'info'}
+          variant={cancelStatus === 'failed' || pickupStatus === 'failed' ? 'error' : cancelStatus === 'success' || pickupStatus === 'scheduled' ? 'success' : 'info'}
           durationMs={5000}
         />
       )}
@@ -183,85 +191,68 @@ export default async function OrdersPage({ searchParams }: { searchParams: Promi
           ) : (
             <div className="space-y-4">
               {shipments.map((s) => (
-                <div key={s.id} className={`relative border rounded-lg p-4 hover:bg-gray-50 ${String(s.status).toLowerCase().includes('cancel') ? 'opacity-60' : ''}`}>
+                <div key={s.id} className={`relative border rounded-xl p-4 bg-white hover:shadow-sm transition ${String(s.status).toLowerCase().includes('cancel') ? 'opacity-70' : ''}`}>
                   {String(s.status).toLowerCase().includes('cancel') && (
                     <div className="absolute top-2 right-2 text-xs px-2 py-0.5 rounded bg-red-100 text-red-700 border border-red-200">Cancelled</div>
                   )}
-                  <div className="flex items-center justify-between mb-4">
-                    <div>
-                      <h3 className="font-medium text-gray-900">Order: {s.order_id}</h3>
-                      <p className="text-sm text-gray-500">AWB: {s.awb}</p>
-                      <p className="text-sm text-gray-500">
+                  <div className="flex items-start justify-between gap-4 mb-3">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="font-semibold text-gray-900 truncate">Order {s.order_id}</h3>
+                        <span className="text-xs text-gray-500">· AWB {s.awb}</span>
+                        <span className={`px-2 py-0.5 rounded-full text-xs ${getStatusColor(s.status)}`}>{s.status}</span>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">
                         {new Date(s.created_at).toLocaleDateString()} at {new Date(s.created_at).toLocaleTimeString()}
                       </p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <form action={`/api/shipments/${encodeURIComponent(s.awb)}/cancel`} method="POST">
-                        <button
-                          className="px-3 py-1.5 rounded-md text-sm bg-red-100 text-red-700 hover:bg-red-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                          title="Cancel Shipment"
-                          type="submit"
-                          disabled={String(s.status).toLowerCase().includes('cancel')}
-                        >
-                          Cancel Shipment
-                        </button>
-                      </form>
+                    <div className="flex items-center gap-2 flex-wrap justify-end">
                       <Link
                         href={`/seller/pickup/${encodeURIComponent(s.awb)}`}
-                        className="px-3 py-1.5 rounded-md text-sm bg-violet-100 text-violet-700 hover:bg-violet-200"
-                        title="Add to Pickup"
+                        className="px-3 py-1.5 rounded-md text-sm bg-[#2B5219] text-white hover:bg-[#1a3110]"
+                        title="Schedule Pickup"
                       >
-                        Add to Pickup
+                        Schedule Pickup
                       </Link>
-                      <a
-                        href={`/api/shipments/${encodeURIComponent(s.awb)}/label?size=A4`}
-                        target="_blank"
-                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md text-sm bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        title="Print Label"
-                      >
-                        <Printer className="h-4 w-4" /> Print Invoice
-                      </a>
                       <a
                         href={`/api/shipments/${encodeURIComponent(s.awb)}/label?size=4R`}
                         target="_blank"
-                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md text-sm bg-gray-100 text-gray-700 hover:bg-gray-200"
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md text-sm border border-gray-200 text-gray-700 hover:bg-gray-50"
                         title="Print Shipping Label"
                       >
-                        <Printer className="h-4 w-4" /> Print Shipping Label
+                        <Printer className="h-4 w-4" /> Label
                       </a>
+                      <a
+                        href={`/api/shipments/${encodeURIComponent(s.awb)}/invoice`}
+                        target="_blank"
+                        className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md text-sm border border-gray-200 text-gray-700 hover:bg-gray-50"
+                        title="Print Invoice"
+                      >
+                        <Printer className="h-4 w-4" /> Invoice
+                      </a>
+                      <CancelShipmentButton awb={s.awb} disabled={String(s.status).toLowerCase().includes('cancel')} />
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-1">
-                    <div>
-                      <p className="text-sm font-medium text-gray-900 leading-tight flex items-center gap-2">Customer
-                        <span className={`px-2 py-0.5 rounded-full text-xs ${getStatusColor(s.status)}`}>{s.status}</span>
-                      </p>
-                      <p className="text-sm text-gray-700 leading-tight">{s.consignee?.name || '—'}</p>
-                      <p className="text-sm text-gray-500 leading-tight">{s.consignee?.phone || '—'} {s.consignee?.email ? `· ${s.consignee.email}` : ''}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900 leading-tight">Address</p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-2">
+                    <div className="md:col-span-2">
+                      <p className="text-sm font-medium text-gray-900 leading-tight">Shipping Address</p>
                       <p className="text-sm text-gray-700 leading-tight">
-                        {s.consignee?.address || '—'}
-                        {s.consignee?.city ? `, ${s.consignee.city}` : ''}
-                        {s.consignee?.state ? `, ${s.consignee.state}` : ''}
-                        {s.consignee?.pincode ? ` - ${s.consignee.pincode}` : ''}
+                        {s.consignee?.address || '—'}{s.consignee?.city ? `, ${s.consignee.city}` : ''}{s.consignee?.state ? `, ${s.consignee.state}` : ''}{s.consignee?.pincode ? ` - ${s.consignee.pincode}` : ''}
                       </p>
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900 leading-tight">Payment</p>
+                      <p className="text-sm font-medium text-gray-900 leading-tight mt-2 md:mt-6">Payment</p>
                       <p className="text-sm text-gray-700 leading-tight">{s.payment_mode || 'Prepaid'} {s.payment_mode === 'COD' && s.cod_amount ? `(₹${s.cod_amount})` : ''}</p>
-                      {/* Print shortcut under Payment removed as requested */}
                     </div>
                   </div>
                   {/* Items list */}
                   {Array.isArray(orderIdToLines[s.order_id]) && orderIdToLines[s.order_id].length > 0 && (
-                    <div className="mt-1">
-                      <p className="text-sm font-medium text-gray-900 leading-tight">Items</p>
-                      <ul className="text-sm text-gray-700 leading-tight list-disc ml-5">
+                    <div className="mt-3 md:mt-4">
+                      <p className="text-base md:text-lg font-semibold text-gray-900 leading-tight mb-2">Products and quantity</p>
+                      <ul className="list-disc ml-5 md:ml-6 text-base md:text-lg text-gray-900 leading-relaxed">
                         {orderIdToLines[s.order_id].map((ln, idx) => (
-                          <li key={`${s.order_id}-${idx}`}>{ln.title} × {ln.quantity}</li>
+                          <li key={`${s.order_id}-${idx}`} className="mb-0.5 md:mb-1"><span className="font-medium">{ln.title}</span> <span className="text-gray-600">×</span> <span className="font-bold">{ln.quantity}</span></li>
                         ))}
                       </ul>
                     </div>

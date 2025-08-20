@@ -71,7 +71,7 @@ export function SearchBar({ small, variant = 'default' }: SearchBarProps) {
           <ul>
             {results.map((p) => (
               <li key={p.id}>
-                <a href={`/products/${p.id}`} target="_blank" rel="noopener noreferrer" className="block px-3 py-2 hover:bg-gray-50 text-sm text-gray-800">
+                <a href={`/products/${p.id}`} className="block px-3 py-2 hover:bg-gray-50 text-sm text-gray-800">
                   {p.title}
                 </a>
               </li>

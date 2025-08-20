@@ -81,8 +81,26 @@ export async function POST(req: NextRequest, context: { params: Promise<{ awb: s
     if (!accepted) {
       const url = new URL('/seller/orders', req.url)
       url.searchParams.set('pickup', 'failed')
-      const snippet = (() => { try { return JSON.stringify(provider?.data).slice(0, 120) } catch { return '' } })()
-      if (snippet) url.searchParams.set('reason', snippet)
+      // Friendlier error mapping for common Delhivery wallet errors
+      try {
+        const d: any = provider?.data || {}
+        const full = JSON.stringify(d).toLowerCase()
+        const prepaidMsg: string | undefined = (d && (d.prepaid || d.message || d.error)) as any
+        const txt = String(prepaidMsg || full)
+        const m = txt.match(/balance\s+is\s+(-?\d+(?:\.\d+)?)\s+which\s+is\s+less\s+than\s+(\d+(?:\.\d+)?)/i)
+        if (m) {
+          url.searchParams.set('reason', 'wallet_low')
+          url.searchParams.set('wallet_balance', m[1])
+          url.searchParams.set('wallet_min', m[2])
+        } else {
+          const snippet = (() => { try { return JSON.stringify(provider?.data).slice(0, 160) } catch { return '' } })()
+          if (snippet) url.searchParams.set('reason', snippet)
+        }
+      } catch (_) {
+        // fallback to raw snippet on any parsing error
+        const snippet = (() => { try { return JSON.stringify(provider?.data).slice(0, 160) } catch { return '' } })()
+        if (snippet) url.searchParams.set('reason', snippet)
+      }
       return NextResponse.redirect(url.toString(), 303)
     }
 

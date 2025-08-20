@@ -202,7 +202,7 @@ export default async function HomePage() {
             {featuredToShow.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4 max-w-6xl mx-auto mb-6">
                 {featuredToShow.map((product) => (
-                  <Link key={product.id} href={`/products/${product.id}`} target="_blank" rel="noopener noreferrer" className="group block">
+                  <Link key={product.id} href={`/products/${product.id}`} className="group block">
                     <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 flex flex-col overflow-hidden border border-gray-100 cursor-pointer">
                       <div className="relative h-28 md:h-36">
                         <Image

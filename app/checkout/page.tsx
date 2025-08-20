@@ -325,7 +325,7 @@ export default function CheckoutPage() {
                     <RazorpayButton
                       amount={totalAmount}
                       isCod={formData.paymentMethod === 'cod'}
-                      productId={productIdFromUrl || (remoteTotals?.items?.[0]?.id ?? items?.[0]?.id) || null}
+                      productId={productIdFromUrl || (remoteTotals?.items?.[0]?.product_id ?? items?.[0]?.product_id) || null}
                       address={formData.address}
                       city={formData.city}
                       state={formData.state}
@@ -363,10 +363,7 @@ export default function CheckoutPage() {
               { (remoteTotals?.items?.length || items.length) > 0 ? (
                 <div className="border-b border-gray-200 pb-4 mb-4 space-y-3">
                   {(remoteTotals?.items || items).map((it: any) => (
-                    <div key={it.id} className="flex items-center gap-4">
-                      <div className="w-16 h-16 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
-                        <img src={it.image || it.images?.[0] || '/products/bamboo-utensils.svg'} alt="" className="w-full h-full object-cover" onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/products/bamboo-utensils.svg' }} />
-                      </div>
+                    <div key={it.id} className="flex items-center">
                       <div className="flex-1">
                         <h3 className="font-semibold text-gray-900 line-clamp-1">{it.name || it.title}</h3>
                         <p className="text-sm text-gray-600">Qty: {it.quantity}</p>

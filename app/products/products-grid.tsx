@@ -250,7 +250,7 @@ export function ProductsGrid() {
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
           {products.map((product) => (
-            <Link key={product.id} href={`/products/${product.id}`} target="_blank" rel="noopener noreferrer" className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 block">
+            <Link key={product.id} href={`/products/${product.id}`} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 block">
               {/* Product Image */}
               <div className="relative h-36 sm:h-48 bg-gray-100">
                 <img

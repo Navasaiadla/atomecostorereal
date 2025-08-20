@@ -67,7 +67,7 @@ export function Header() {
             </Link>
 
             {/* Desktop-only Sell Here button */}
-            <Link href="/sell-here" className="hidden lg:inline-block">
+            <Link href="/seller/dashboard" className="hidden lg:inline-block">
               <span className="inline-flex items-center px-4 py-2 rounded-full text-white text-sm font-semibold" style={{ backgroundColor: '#8B4513' }}>
                 Sell Here
               </span>

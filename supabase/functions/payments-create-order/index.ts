@@ -50,6 +50,15 @@ serve(async (request: Request) => {
     ? name
     : [first_name, last_name].filter((s) => !!(s && s.trim().length > 0)).join(" ");
 
+  // Resolve seller_id from product_id if available (used to populate orders.seller_id / orders.sellers_id and metadata)
+  let sellerId: string | null = null;
+  try {
+    if (product_id) {
+      const prod = await admin.from('products').select('seller_id').eq('id', product_id).single();
+      if (!prod.error) sellerId = (prod.data as any)?.seller_id ?? null;
+    }
+  } catch {}
+
   // Idempotency: if an order exists for the same key, reuse it.
   // If it already has a provider order id, return immediately.
   // If not, continue below to create the provider order for this existing row.
@@ -61,6 +70,13 @@ serve(async (request: Request) => {
     .maybeSingle();
 
   if (existing.data) {
+    // Best-effort: persist seller id on the order row if we can
+    try {
+      if (sellerId) await admin.from('orders').update({ seller_id: sellerId as any }).eq('id', existing.data.id as string);
+    } catch (_) {}
+    try {
+      if (sellerId) await admin.from('orders').update({ sellers_id: sellerId as any }).eq('id', existing.data.id as string);
+    } catch (_) {}
     if (existing.data.razorpay_order_id) {
       return ok({
         orderId: existing.data.id,
@@ -80,14 +96,6 @@ serve(async (request: Request) => {
 
   if (!localOrderId) {
     // 1) Insert draft order (status=pending)
-    // Optional: resolve seller_id from product_id
-    let sellerId: string | null = null;
-    try {
-      if (product_id) {
-        const prod = await admin.from('products').select('seller_id').eq('id', product_id).single();
-        if (!prod.error) sellerId = (prod.data as any)?.seller_id ?? null;
-      }
-    } catch {}
 
     let insertRes = await admin
       .from("orders")
@@ -97,6 +105,9 @@ serve(async (request: Request) => {
         amount,
         currency,
         idempotency_key,
+        // Best effort persist seller id into a dedicated column for reporting if schema provides it
+        seller_id: sellerId as any,
+        sellers_id: sellerId as any,
         metadata: {
           ...(metadata ?? {}),
           seller_id: sellerId,
@@ -133,6 +144,8 @@ serve(async (request: Request) => {
             amount,
             currency,
             idempotency_key,
+            seller_id: sellerId as any,
+            sellers_id: sellerId as any,
             metadata: {
               ...(metadata ?? {}),
               seller_id: sellerId,
@@ -199,6 +212,14 @@ serve(async (request: Request) => {
       localOrderId = insertRes.data.id as string;
     }
   }
+
+  // Best-effort: persist seller id on the order row (support either seller_id or sellers_id)
+  try {
+    if (sellerId && localOrderId) await admin.from('orders').update({ seller_id: sellerId as any }).eq('id', localOrderId);
+  } catch (_) {}
+  try {
+    if (sellerId && localOrderId) await admin.from('orders').update({ sellers_id: sellerId as any }).eq('id', localOrderId);
+  } catch (_) {}
 
   // 2) Create Razorpay order
   const keyId = getEnvOrThrow("RAZORPAY_KEY_ID");

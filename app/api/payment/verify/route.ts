@@ -113,7 +113,9 @@ export async function POST(request: NextRequest) {
       // Persist metadata snapshot; mark COD as placed (COD is not yet paid )
       try {
         const nextMeta = { ...meta, seller_id: sellerId ?? (meta as any)?.seller_id ?? null, shipping: ship, shipment: { provider: 'delhivery', waybill: awb || null, created_at: new Date().toISOString(), provider_status: providerStatus, provider_response: providerData } }
-        await admin.from('orders').update({ metadata: nextMeta as any, status: 'cod_placed' }).eq('id', orderId)
+        // Write both sellers_id and seller_id for compatibility
+        await admin.from('orders').update({ metadata: nextMeta as any, status: 'cod_placed', sellers_id: sellerId as any }).eq('id', orderId)
+        try { await admin.from('orders').update({ seller_id: sellerId as any }).eq('id', orderId) } catch (_) {}
       } catch (e) {
         console.error('cod.persist_awb_failed', (e as any)?.message || e)
       }
@@ -244,7 +246,9 @@ export async function POST(request: NextRequest) {
             shipping: ship,
             shipment: { provider: 'delhivery', waybill: awb || null, created_at: new Date().toISOString(), provider_status: providerStatus, provider_response: providerData },
           }
-          await admin.from('orders').update({ metadata: nextMeta as any }).eq('id', orderId)
+          // Persist sellers_id and seller_id columns along with metadata
+          await admin.from('orders').update({ metadata: nextMeta as any, sellers_id: sellerId as any }).eq('id', orderId)
+          try { await admin.from('orders').update({ seller_id: sellerId as any }).eq('id', orderId) } catch {}
           if (awb && String(providerStatus || '').startsWith('2')) {
             try { await getPackingSlip(cfg, [awb], '4R') } catch {}
             try {

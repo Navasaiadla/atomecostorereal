@@ -14,6 +14,11 @@ export async function GET(request: NextRequest, context: { params: Promise<{ awb
   }
 
   try {
+    // Determine preferred viewer zoom per requested size to reduce cropping in 4R
+    const reqUrl0 = new URL(request.url)
+    const sizeParam0 = (reqUrl0.searchParams.get('size') || 'A4').toUpperCase()
+    const viewerZoom = sizeParam0 === '4R' ? 'page-fit' : 'page-width'
+
     const admin = createAdminClient()
     const { data: row } = await admin
       .from('shipments')
@@ -24,7 +29,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ awb
     // If we already have a label_url, normalize it and try to use it.
     if (row?.label_url && typeof row.label_url === 'string' && row.label_url.startsWith('http')) {
       const normalized = row.label_url.replace(/\\u0026/g, '&').replace(/&amp;/g, '&').trim()
-      const withZoom = normalized.includes('#') ? normalized : `${normalized}#zoom=page-width`
+      const withZoom = normalized.includes('#') ? normalized : `${normalized}#zoom=${viewerZoom}`
       // Best-effort validation: if HEAD fails, fall back to regeneration
       try {
         const head = await fetch(normalized, { method: 'HEAD' })
@@ -100,7 +105,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ awb
         const pdfMatch = raw.match(/https?:\/\/[^\s'"<>]+\.pdf/)
         if (pdfMatch && pdfMatch[0]) {
           const pdfUrl = pdfMatch[0].replace(/\\u0026/g, '&').replace(/&amp;/g, '&').trim()
-          const withZoom = pdfUrl.includes('#') ? pdfUrl : `${pdfUrl}#zoom=page-width`
+          const withZoom = pdfUrl.includes('#') ? pdfUrl : `${pdfUrl}#zoom=${viewerZoom}`
           await admin.from('shipments').update({ label_url: pdfUrl }).eq('awb', awb)
           const pdfRes = await fetch(pdfUrl)
           if (pdfRes.ok) {
@@ -125,7 +130,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ awb
 
     // Normalize, persist and redirect
     const normalized = labelUrl.replace(/\\u0026/g, '&').replace(/&amp;/g, '&').trim()
-    const withZoom = normalized.includes('#') ? normalized : `${normalized}#zoom=page-width`
+    const withZoom = normalized.includes('#') ? normalized : `${normalized}#zoom=${viewerZoom}`
     await admin.from('shipments').update({ label_url: normalized }).eq('awb', awb)
     // Stream inline to keep viewer in our route (hash applies reliably)
     try {
