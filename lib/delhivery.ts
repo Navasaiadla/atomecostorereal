@@ -273,10 +273,24 @@ export async function cancelShipment(
 
 export function verifyWebhookSignature(rawBody: string, signature: string | null): boolean {
 	const secret = process.env.DELHIVERY_WEBHOOK_SECRET || ''
-	if (!secret) return false
-	if (!signature) return false
-	const hmac = crypto.createHmac('sha256', secret).update(rawBody, 'utf8').digest('hex')
-	return signature === hmac || signature === Buffer.from(hmac, 'hex').toString('base64')
+	if (!secret || !signature) return false
+
+	const computedHex = crypto.createHmac('sha256', secret).update(rawBody, 'utf8').digest('hex')
+	const computedBase64 = Buffer.from(computedHex, 'hex').toString('base64')
+
+	const provided = (signature || '').trim().replace(/^sha256=/i, '')
+
+	function safeEqual(a: string, b: string): boolean {
+		const aBuf = Buffer.from(a, 'utf8')
+		const bBuf = Buffer.from(b, 'utf8')
+		if (aBuf.length !== bBuf.length) return false
+		return crypto.timingSafeEqual(aBuf, bBuf)
+	}
+
+	// Prefer strict format checks to avoid accidental truthy matches
+	const looksHex = /^[a-f0-9]{64}$/i.test(provided)
+	if (looksHex && safeEqual(provided, computedHex)) return true
+	return safeEqual(provided, computedBase64)
 }
 
 
